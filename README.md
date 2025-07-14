@@ -21,45 +21,45 @@ Automated accessibility testing system that crawls every accessible page on your
 - 📱 **Multi-Tool Coverage**: axe-core + Pa11y + visual analysis combined
 - 🏗️ **Modular Architecture**: Clean, maintainable service-based design
 
-## 🚀 Quick Start with CLI Tool (Recommended)
+## 🚀 Getting Started
 
-The easiest way to configure and run accessibility tests is with our interactive CLI tool:
+The easiest way to run accessibility tests is with our interactive CLI tool:
 
 ```bash
-# Start the interactive configuration tool
+# Start the interactive CLI tool
 npm run cli
 # or
 node cli.js
 ```
 
-The CLI tool provides:
-- 🚀 **Simple Setup**: Enter your website URL and run accessibility audit immediately
-- 🧪 **One-Click Testing**: Run tests directly from the tool
-- 🧹 **Cleanup Tools**: Reset everything with one command
-- 🔄 **Clean Process**: Exits cleanly when complete
+### 🎯 Simple 3-Step Process:
 
-### CLI Features:
+1. **🚀 Run Accessibility Audit**: Enter your website URL and start comprehensive testing
+2. **🧹 Clean Up Reports**: Clear old reports when needed
+3. **🚪 Exit**: Clean process termination
 
-1. **Simple Setup**: Perfect for any user
-   - Enter your website URL
-   - Automatic optimal configuration
-   - Run comprehensive accessibility audit immediately
+### ✨ What You Get:
 
-2. **Clean Interface**: Streamlined options
-   - Run Accessibility Audit
-   - Clean Up Reports
-   - Exit cleanly
+- **🎯 Universal Testing**: Works with any website - no configuration needed
+- **🔧 Smart Defaults**: Optimised settings for comprehensive accessibility analysis
+- **📊 Professional Reports**: Three audience-specific PDF reports plus detailed JSON data
+- **🧪 Multi-Tool Analysis**: axe-core + Pa11y + visual analysis combined
+- **🚀 Quick Results**: Comprehensive crawling (up to 50 pages, 4 levels deep)
 
-3. **Smart Defaults**: No configuration needed
-   - Optimised timeouts and retry settings
-   - Comprehensive crawling (up to 50 pages, 4 levels deep)
-   - Multi-tool analysis (axe-core + Pa11y + visual)
+## 🛠️ System Requirements
 
-4. **Professional Output**: 
-   - Audience-specific PDF reports
-   - Detailed JSON analysis
-   - Clean process termination
+- **Node.js 16+**: Required for running the application
+- **Playwright**: Automatically installed with dependencies
+- **Chrome/Chromium**: Automatically installed by Playwright
+- **Internet connection**: Required for website crawling
+- **Memory**: 4GB+ recommended for optimal performance
 
+**Development Dependencies** (automatically installed):
+- TypeScript for type checking
+- ESLint for code linting
+- Prettier for code formatting
+- Pa11y for accessibility testing
+- Axe-core for accessibility analysis
 
 ## ⚠️ Known Issues
 
@@ -397,32 +397,24 @@ coverage:
 
 ## 🛠️ Developer Fix Guide
 
-The system now generates **three audience-specific PDF reports** tailored to
-different roles while maintaining all comprehensive information:
+The system generates **three audience-specific PDF reports** tailored to different roles:
 
-## 📊 Audience-Specific Reports
-
-### Product Owners & Stakeholders
-
+### 📊 Product Owners & Stakeholders
 - **Focus**: Business impact, risk assessment, and ROI
 - **Size**: ~300KB - Executive summary optimised for decision makers
 - **Content**: Compliance overview, implementation timeline, cost estimates
 
-### User Researchers & UCD
-
+### 🔬 User Researchers & UCD
 - **Focus**: User impact analysis and testing methodology
 - **Size**: ~400KB - Research-focused insights and testing guidance
-- **Content**: User journey analysis, testing scenarios, research
-  recommendations
+- **Content**: User journey analysis, testing scenarios, research recommendations
 
-### Developers & Testers
-
+### 💻 Developers & Testers
 - **Focus**: Technical implementation and code fixes
 - **Size**: ~2MB - Comprehensive technical guide with visual elements
 - **Content**: Complete Developer Fix Guide with condensed affected locations table
 
-The comprehensive **Developer Fix Guide** (in the Developers & Testers report)
-makes fixing accessibility violations straightforward:
+The comprehensive **Developer Fix Guide** (in the Developers & Testers report) makes fixing accessibility violations straightforward:
 
 ### 📸 Visual Context
 
@@ -496,40 +488,6 @@ makes fixing accessibility violations straightforward:
 <input type="email" id="email" />
 ```
 
-## 🛠️ System Requirements
-
-- Node.js 16+
-- Playwright installed
-- Chrome/Chromium browser (automatically installed by Playwright)
-- Internet connection for website crawling
-- Sufficient system memory (4GB+ recommended)
-
-**Development Dependencies** (automatically installed):
-- TypeScript for type checking
-- ESLint for code linting
-- Prettier for code formatting
-- Pa11y for accessibility testing
-- Axe-core for accessibility analysis
-
----
-
-## 🎯 Report Distribution Strategy
-
-Each audience receives exactly the information they need:
-
-- **Stakeholders** get business-focused insights for decision making
-- **Researchers** receive user-centred analysis for testing planning
-- **Developers** access complete technical implementation guidance
-
-This targeted approach ensures:
-
-- 📊 **Faster adoption**: Each role gets relevant information without
-  overwhelming detail
-- 💰 **Better ROI**: Stakeholders see business impact and cost justification
-- 🔬 **Informed research**: UX teams understand user impact and testing
-  priorities
-- 💻 **Efficient development**: Technical teams have actionable fix guidance
-
 ---
 
 <div align="center">
@@ -548,25 +506,6 @@ This targeted approach ensures:
   
   <p><em>Professional accessibility testing made simple</em></p>
 </div>
-
----
-
-## 🎯 Getting Started
-
-**For the best experience, use the fresh start command:**
-
-```bash
-npm run audit:fresh
-```
-
-This single command will:
-1. ✅ **Clean** all previous reports and cache
-2. ✅ **Discover** all pages on your site
-3. ✅ **Analyse** accessibility across all discovered pages
-4. ✅ **Generate** comprehensive PDF and JSON reports
-5. ✅ **Exit** cleanly when complete
-
-Run your audit and make the web more accessible! 🌍
 
 ---
 
