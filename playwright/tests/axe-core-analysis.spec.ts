@@ -8,7 +8,7 @@ import path from 'path';
 function getViewportInfo(page: any): string {
   const viewport = page.viewportSize();
   if (!viewport) return 'Desktop Chrome (1280x720)';
-  
+
   const width = viewport.width;
   const height = viewport.height;
   return `Desktop Chrome (${width}x${height})`;
@@ -37,7 +37,8 @@ test.describe('Axe-Core Accessibility Analysis', () => {
 
     // Step 1: Load cached page list (pre-crawl should have run first)
     console.log('\n📡 Phase 1: Loading cached page list...');
-    const cachedPageList = PageListCache.loadPageList();
+    const targetSiteUrl = process.env.TARGET_SITE_URL || 'https://nimbleapproach.com';
+    const cachedPageList = PageListCache.loadPageList(targetSiteUrl);
 
     if (!cachedPageList) {
       throw new Error(

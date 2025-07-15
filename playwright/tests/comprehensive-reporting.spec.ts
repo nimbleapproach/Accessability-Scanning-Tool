@@ -13,6 +13,22 @@ function getViewportInfo(page: any): string {
   return `Desktop Chrome (${width}x${height})`;
 }
 
+/**
+ * Creates a clickable terminal link using ANSI escape codes
+ * @param text - The text to display
+ * @param url - The URL or file path to link to
+ * @param color - The color to apply to the link (default: magenta)
+ * @returns Formatted clickable link
+ */
+function createClickableLink(text: string, url: string, color: string = '\x1b[35m'): string {
+  const reset = '\x1b[0m';
+  // Convert file path to file:// URL for better compatibility
+  const linkUrl = url.startsWith('/') ? `file://${url}` : url;
+
+  // OSC 8 hyperlink format: \x1b]8;;URL\x1b\\TEXT\x1b]8;;\x1b\\
+  return `${color}\x1b]8;;${linkUrl}\x1b\\${text}\x1b]8;;\x1b\\${reset}`;
+}
+
 // Helper function to merge violations from multiple tools
 function mergeViolationsFromMultipleTools(violations: any[]): any[] {
   const violationMap = new Map<string, any>();
@@ -222,9 +238,15 @@ test.describe('Comprehensive Accessibility Reporting', () => {
 
     // Generate user-friendly filename
     const siteUrl = combinedReports.length > 0 ? combinedReports[0].url : 'unknown-site';
-    const domain = siteUrl.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].replace(/[^a-z0-9]/gi, '-');
+    const domain = siteUrl
+      .replace(/^https?:\/\//, '')
+      .replace(/^www\./, '')
+      .split('/')[0]
+      .replace(/[^a-z0-9]/gi, '-');
     const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
-    const time = new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' }).replace(/:/g, '-');
+    const time = new Date()
+      .toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' })
+      .replace(/:/g, '-');
     const filename = `${domain}-accessibility-report-${date}-${time}`;
 
     console.log(`📄 Creating report: ${filename}`);
@@ -285,17 +307,36 @@ test.describe('Comprehensive Accessibility Reporting', () => {
     console.log('='.repeat(80));
     console.log(`⏱️  Total reporting time: ${duration} seconds`);
     console.log(`📊 Combined analysis from multiple parallel workers`);
-    console.log(`📄 Detailed JSON report: playwright/accessibility-reports/${filename}.json`);
-    console.log(`📄 Audience-specific PDF reports:`);
-    console.log(
-      `   📊 Product Owners & Stakeholders: playwright/accessibility-reports/${filename}-stakeholders.pdf`
+    const jsonPath = path.join(
+      process.cwd(),
+      'playwright',
+      'accessibility-reports',
+      `${filename}.json`
     );
-    console.log(
-      `   🔬 User Researchers & UCD: playwright/accessibility-reports/${filename}-researchers.pdf`
+    const stakeholdersPath = path.join(
+      process.cwd(),
+      'playwright',
+      'accessibility-reports',
+      `${filename}-stakeholders.pdf`
     );
-    console.log(
-      `   💻 Developers & Testers: playwright/accessibility-reports/${filename}-developers.pdf`
+    const researchersPath = path.join(
+      process.cwd(),
+      'playwright',
+      'accessibility-reports',
+      `${filename}-researchers.pdf`
     );
+    const developersPath = path.join(
+      process.cwd(),
+      'playwright',
+      'accessibility-reports',
+      `${filename}-developers.pdf`
+    );
+
+    console.log(`📄 Detailed JSON report: ${createClickableLink(`${filename}.json`, jsonPath)}`);
+    console.log(`📄 Audience-specific PDF reports (click to open):`);
+    console.log(`   ${createClickableLink('📊 Product Owners & Stakeholders', stakeholdersPath)}`);
+    console.log(`   ${createClickableLink('🔬 User Researchers & UCD', researchersPath)}`);
+    console.log(`   ${createClickableLink('💻 Developers & Testers', developersPath)}`);
 
     // Recommendations based on results
     console.log('\n💡 RECOMMENDATIONS:');

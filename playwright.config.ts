@@ -1,14 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
@@ -51,7 +43,7 @@ export default defineConfig({
     // Universal navigation timeout - will be overridden by adaptive logic
     navigationTimeout: 45_000, // 45 seconds (increased for slower sites)
 
-    // Universal action timeout  
+    // Universal action timeout
     actionTimeout: 30_000, // 30 seconds (increased for complex interactions)
 
     // Disable resource-heavy features for better performance

@@ -37,7 +37,8 @@ test.describe('Visual Accessibility Analysis', () => {
 
     // Step 1: Load cached page list (pre-crawl should have run first)
     console.log('\n📡 Phase 1: Loading cached page list...');
-    const cachedPageList = PageListCache.loadPageList();
+    const targetSiteUrl = process.env.TARGET_SITE_URL || 'https://nimbleapproach.com';
+    const cachedPageList = PageListCache.loadPageList(targetSiteUrl);
 
     if (!cachedPageList) {
       throw new Error(
@@ -297,5 +298,206 @@ test.describe('Visual Accessibility Analysis', () => {
     expect(visualResultsFile).toBeTruthy();
 
     console.log('✅ Visual analysis completed successfully!');
+  });
+
+  test('@accessibility @visual @mobile @parallel Mobile viewport accessibility analysis', async ({
+    page,
+    browserName,
+  }) => {
+    console.log('📱 Starting mobile viewport accessibility analysis...');
+    console.log(`🌐 Browser: ${browserName}`);
+
+    // Set mobile viewport (iPhone 12 Pro dimensions)
+    await page.setViewportSize({ width: 390, height: 844 });
+    console.log(`📱 Viewport: Mobile (390x844)`);
+
+    const startTime = Date.now();
+
+    // Step 1: Load cached page list (pre-crawl should have run first)
+    console.log('\n📡 Phase 1: Loading cached page list...');
+    const targetSiteUrl = process.env.TARGET_SITE_URL || 'https://nimbleapproach.com';
+    const cachedPageList = PageListCache.loadPageList(targetSiteUrl);
+
+    if (!cachedPageList) {
+      throw new Error(
+        'No cached page list found. Please run pre-crawl first: npm run audit:pre-crawl'
+      );
+    }
+
+    const pages = cachedPageList.pages;
+    console.log(`✅ Using cached page list for mobile visual analysis!`);
+    console.log(`📊 Found ${pages.length} pages for mobile testing`);
+
+    // Validate we found pages
+    expect(pages.length).toBeGreaterThan(0);
+
+    // Step 2: Run mobile viewport analysis on selected pages (test first 5 for performance)
+    console.log('\n📱 Phase 2: Running mobile accessibility analysis on key pages...');
+
+    const mobileResults = [];
+    const urls = pages.slice(0, 5).map(p => p.url); // Test first 5 pages for mobile
+
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      console.log(`📱 Mobile analysis ${i + 1}/${urls.length}: ${url}`);
+
+      try {
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
+
+        // Run mobile-specific accessibility checks
+        console.log(`   📱 Running mobile accessibility analysis...`);
+        const mobileAxeResult = await accessibilityUtils.runAxeAnalysis({
+          tags: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'],
+          rules: {
+            'target-size': { enabled: true }, // Touch target size is crucial for mobile
+            'color-contrast': { enabled: true },
+          },
+        });
+
+        const mobileViolations = await accessibilityUtils.processViolations(
+          mobileAxeResult.violations,
+          false // Disable screenshots for performance
+        );
+
+        // Get mobile-specific page analysis
+        const pageTitle = await page.title();
+        const isResponsive = await page.evaluate(() => {
+          const viewport = document.querySelector('meta[name="viewport"]');
+          return viewport && viewport.getAttribute('content')?.includes('width=device-width');
+        });
+
+        // Take mobile screenshot
+        const screenshotPath = path.join(
+          process.cwd(),
+          'playwright',
+          'accessibility-reports',
+          'parallel-analysis',
+          'screenshots',
+          `mobile-${i + 1}-${url.replace(/[^a-z0-9]/gi, '_')}.png`
+        );
+        const screenshotDir = path.dirname(screenshotPath);
+        if (!existsSync(screenshotDir)) {
+          mkdirSync(screenshotDir, { recursive: true });
+        }
+
+        try {
+          await page.screenshot({
+            path: screenshotPath,
+            fullPage: false,
+            timeout: 5000,
+          });
+          console.log(`   📸 Mobile screenshot saved: ${screenshotPath}`);
+        } catch (screenshotError) {
+          const errorMessage =
+            screenshotError instanceof Error ? screenshotError.message : String(screenshotError);
+          console.warn(`   ⚠️ Failed to capture mobile screenshot for ${url}:`, errorMessage);
+        }
+
+        // Mobile-specific analysis
+        const mobileIssues = await page.evaluate(() => {
+          const issues = [];
+
+          // Check for touch targets that are too small
+          const clickableElements = document.querySelectorAll(
+            'button, a, input[type="button"], input[type="submit"]'
+          );
+          clickableElements.forEach((element, index) => {
+            const rect = element.getBoundingClientRect();
+            const area = rect.width * rect.height;
+            const minTouchTarget = 44 * 44; // 44px x 44px minimum touch target (iOS HIG)
+
+            if (area < minTouchTarget && area > 0) {
+              issues.push({
+                type: 'touch-target',
+                issue: 'small-touch-target',
+                selector:
+                  element.tagName.toLowerCase() + (index > 0 ? `:nth-child(${index + 1})` : ''),
+                size: `${Math.round(rect.width)}x${Math.round(rect.height)}`,
+                area: Math.round(area),
+                recommended: '44x44 minimum',
+              });
+            }
+          });
+
+          // Check for horizontal scrolling
+          const hasHorizontalScroll = document.documentElement.scrollWidth > window.innerWidth;
+          if (hasHorizontalScroll) {
+            issues.push({
+              type: 'layout',
+              issue: 'horizontal-scroll',
+              message: 'Page has horizontal scrolling on mobile viewport',
+              scrollWidth: document.documentElement.scrollWidth,
+              viewportWidth: window.innerWidth,
+            });
+          }
+
+          return issues;
+        });
+
+        mobileResults.push({
+          url: url,
+          timestamp: new Date().toISOString(),
+          browser: browserName,
+          viewport: 'Mobile (390x844)',
+          pageTitle: pageTitle,
+          isResponsive: isResponsive,
+          mobileViolations: mobileViolations,
+          mobileIssues: mobileIssues,
+          screenshotPath: screenshotPath,
+        });
+
+        console.log(`   ✅ Mobile analysis completed for ${url}`);
+        console.log(`   📱 Mobile violations: ${mobileViolations.length}`);
+        console.log(`   🎯 Mobile issues: ${mobileIssues.length}`);
+        console.log(`   📐 Responsive: ${isResponsive ? 'Yes' : 'No'}`);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.warn(`   ⚠️ Mobile analysis failed for ${url}:`, errorMessage);
+      }
+    }
+
+    // Step 3: Generate mobile analysis report
+    console.log('\n📄 Phase 3: Generating mobile analysis report...');
+    const mobileReportPath = path.join(
+      process.cwd(),
+      'playwright',
+      'accessibility-reports',
+      'parallel-analysis',
+      'mobile-visual-analysis-report.json'
+    );
+
+    const mobileReportDir = path.dirname(mobileReportPath);
+    if (!existsSync(mobileReportDir)) {
+      mkdirSync(mobileReportDir, { recursive: true });
+    }
+
+    const mobileReport = {
+      timestamp: new Date().toISOString(),
+      testSuite: 'Mobile Visual Accessibility Analysis',
+      browser: browserName,
+      viewport: 'Mobile (390x844)',
+      summary: {
+        totalPages: mobileResults.length,
+        responsivePages: mobileResults.filter(r => r.isResponsive).length,
+        pagesWithViolations: mobileResults.filter(r => r.mobileViolations.length > 0).length,
+        pagesWithMobileIssues: mobileResults.filter(r => r.mobileIssues.length > 0).length,
+        totalViolations: mobileResults.reduce((sum, r) => sum + r.mobileViolations.length, 0),
+        totalMobileIssues: mobileResults.reduce((sum, r) => sum + r.mobileIssues.length, 0),
+      },
+      results: mobileResults,
+    };
+
+    writeFileSync(mobileReportPath, JSON.stringify(mobileReport, null, 2));
+
+    const elapsedTime = Date.now() - startTime;
+    console.log(`✅ Mobile accessibility analysis completed in ${elapsedTime}ms`);
+    console.log(`📊 Total pages analyzed: ${mobileResults.length}`);
+    console.log(
+      `📱 Responsive pages: ${mobileReport.summary.responsivePages}/${mobileReport.summary.totalPages}`
+    );
+    console.log(`🎯 Mobile violations: ${mobileReport.summary.totalViolations}`);
+    console.log(`📐 Mobile issues: ${mobileReport.summary.totalMobileIssues}`);
+    console.log(`📄 Mobile report generated at: ${mobileReportPath}`);
+    console.log('📱 Mobile analysis complete!');
   });
 });

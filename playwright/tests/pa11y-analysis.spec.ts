@@ -37,7 +37,8 @@ test.describe('Pa11y Accessibility Analysis', () => {
 
     // Step 1: Load cached page list (pre-crawl should have run first)
     console.log('\n📡 Phase 1: Loading cached page list...');
-    const cachedPageList = PageListCache.loadPageList();
+    const targetSiteUrl = process.env.TARGET_SITE_URL || 'https://nimbleapproach.com';
+    const cachedPageList = PageListCache.loadPageList(targetSiteUrl);
 
     if (!cachedPageList) {
       throw new Error(
