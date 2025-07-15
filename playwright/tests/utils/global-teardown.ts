@@ -1,5 +1,8 @@
 // Using Playwright's built-in browser management instead of manual process killing
 
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
 /**
  * Global teardown function to ensure clean exit after tests complete
  * Uses Playwright's built-in browser management instead of aggressive process killing
@@ -50,8 +53,6 @@ async function clearTemporaryFiles(): Promise<void> {
   console.log('🗑️  Clearing temporary files...');
 
   try {
-    const { exec } = require('child_process');
-    const { promisify } = require('util');
     const execAsync = promisify(exec);
 
     // Clear only Playwright-specific temp directories
@@ -74,8 +75,6 @@ async function clearTemporaryFiles(): Promise<void> {
  */
 async function verifyPlaywrightCleanup(): Promise<void> {
   try {
-    const { exec } = require('child_process');
-    const { promisify } = require('util');
     const execAsync = promisify(exec);
 
     // Only check for Playwright-specific processes, not all Chrome instances

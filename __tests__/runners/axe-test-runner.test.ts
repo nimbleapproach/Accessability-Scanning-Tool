@@ -4,6 +4,7 @@ import {
   AxeTestRunner,
 } from '../../playwright/tests/utils/runners/axe-test-runner';
 import { AxeResults } from 'axe-core';
+import { AxeBuilder } from '@axe-core/playwright';
 
 // Mock dependencies
 jest.mock('@axe-core/playwright');
@@ -87,8 +88,7 @@ describe('AxeTestRunner', () => {
     };
 
     // Mock the imports
-    const { AxeBuilder } = require('@axe-core/playwright');
-    AxeBuilder.mockImplementation(() => mockAxeBuilder);
+    (AxeBuilder as jest.MockedClass<typeof AxeBuilder>).mockImplementation(() => mockAxeBuilder);
 
     // Create test instance
     axeRunner = new AxeTestRunner(mockPage);

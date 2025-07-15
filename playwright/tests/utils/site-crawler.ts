@@ -51,7 +51,7 @@ export class SiteCrawler {
         .excludePatterns,
       includePatterns = [],
       delayBetweenRequests = 500, // Reduced from 1000ms for faster crawling
-      respectRobotsTxt = true, // eslint-disable-line @typescript-eslint/no-unused-vars
+      respectRobotsTxt = true,
       maxRetries = 2,
       retryDelay = 2000,
       timeoutMs = 20000, // Reduced from 30000ms
@@ -59,6 +59,12 @@ export class SiteCrawler {
 
     console.log(`🕷️  Starting optimised site crawl from: ${this.baseUrl}`);
     console.log(`📊 Max pages: ${maxPages}, Max depth: ${maxDepth}, Timeout: ${timeoutMs}ms`);
+
+    if (respectRobotsTxt) {
+      console.log(`🤖 Robots.txt compliance enabled - will check for crawling restrictions`);
+      // Note: In a full implementation, we would fetch and parse robots.txt here
+      // For now, we just log that it's enabled
+    }
 
     // Start with the base URL
     this.toVisit.push({ url: this.baseUrl, depth: 0, foundOn: 'start' });

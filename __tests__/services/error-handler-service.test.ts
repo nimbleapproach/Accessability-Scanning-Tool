@@ -375,7 +375,7 @@ describe('ErrorHandlerService', () => {
 
     it('should handle functions that throw non-error objects', async () => {
       const throwingFunction = jest.fn().mockImplementation(() => {
-        // eslint-disable-next-line no-throw-literal
+         
         throw 'String error';
       });
 

@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
 import path from 'path';
 
 export interface CachedPageList {
@@ -116,7 +116,7 @@ export class PageListCache {
 
   static clearCache(): void {
     if (existsSync(PageListCache.CACHE_FILE)) {
-      require('fs').unlinkSync(PageListCache.CACHE_FILE);
+      unlinkSync(PageListCache.CACHE_FILE);
       console.log('🗑️  Page list cache cleared');
     }
   }

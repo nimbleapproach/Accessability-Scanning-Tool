@@ -14,7 +14,7 @@ beforeEach(() => {
 
 // Global test utilities
 global.testUtils = {
-  createMockPage: () => ({
+  createMockPage: (): any => ({
     url: jest.fn().mockReturnValue('https://example.com'),
     goto: jest.fn(),
     screenshot: jest.fn(),
@@ -33,13 +33,13 @@ global.testUtils = {
     viewportInfo: '1200x800',
   }),
 
-  createMockServiceResult: <T>(data: T) => ({
+  createMockServiceResult: <T>(data: T): any => ({
     success: true,
     data,
     timestamp: new Date().toISOString(),
   }),
 
-  createMockErrorResult: (error: string) => ({
+  createMockErrorResult: (error: string): any => ({
     success: false,
     error,
     timestamp: new Date().toISOString(),
@@ -59,7 +59,7 @@ global.testUtils = {
 // Global type definitions for TypeScript
 declare global {
   namespace globalThis {
-    // eslint-disable-next-line no-var
+
     var testUtils: {
       createMockPage: () => any;
       createMockServiceResult: <T>(data: T) => any;
