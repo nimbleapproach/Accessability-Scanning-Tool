@@ -26,48 +26,38 @@ src/
 │   │   └── common.ts                      # Shared type definitions
 │   └── utils/
 │       └── browser-manager.ts             # Browser lifecycle management
-tests/
-├── e2e/                                   # Playwright E2E tests for web interface
-│   ├── README.md                          # E2E testing documentation
-│   └── web-interface.test.ts              # Web interface E2E tests
-├── unit/                                  # Jest unit tests
-├── integration/                           # Jest integration tests
-├── storybook/                             # Storybook validation tests
-│   └── storybook-validation.test.ts       # Component architecture validation
-└── setup.ts                               # Global test setup
-```
-└── utils/
-    ├── analysis/
-    │   ├── accessibility-tool.ts          # Base accessibility tool interface
-    │   └── tool-orchestrator.ts           # Multi-tool coordination
-    ├── analyzers/
-    │   └── page-analyzer.ts               # Page structure analysis
-    ├── api/
-    │   └── analysis-service.ts            # API service layer
-    ├── crawler/
-    │   └── site-crawler.ts                # Website crawling logic
-    ├── orchestration/
-    │   ├── accessibility-test-orchestrator.ts  # Main orchestrator
-    │   ├── analysis-cache.ts              # Caching layer
-    │   ├── analysis-worker.ts             # Worker pool management
-    │   ├── parallel-analyzer.ts           # Parallel execution
-    │   ├── smart-batcher.ts               # Batch processing
-    │   ├── task-queue.ts                  # Task queue management
-    │   └── workflow-orchestrator.ts       # Workflow coordination
-    ├── processors/
-    │   └── violation-processor.ts         # Violation processing
-    ├── reporting/
-    │   └── pdf-generators/
-    │       ├── pdf-orchestrator.ts        # PDF generation orchestration
-    │       └── pdf-template-generator.ts  # PDF template creation
-    ├── runners/
-    │   ├── axe-test-runner.ts             # axe-core integration
-    │   └── pa11y-test-runner.ts           # Pa11y integration
-    └── services/
-        ├── configuration-service.ts       # Configuration management
-        ├── error-handler-service.ts       # Error handling & logging
-        ├── file-operations-service.ts     # File system operations
-        └── security-validation-service.ts # Security validation
+├── utils/
+│   ├── analysis/
+│   │   ├── accessibility-tool.ts          # Base accessibility tool interface
+│   │   └── tool-orchestrator.ts           # Multi-tool coordination
+│   ├── analyzers/
+│   │   └── page-analyzer.ts               # Page structure analysis
+│   ├── api/
+│   │   └── analysis-service.ts            # API service layer
+│   ├── crawler/
+│   │   └── site-crawler.ts                # Website crawling logic
+│   ├── orchestration/
+│   │   ├── accessibility-test-orchestrator.ts  # Main orchestrator
+│   │   ├── analysis-cache.ts              # Caching layer
+│   │   ├── analysis-worker.ts             # Worker pool management
+│   │   ├── parallel-analyzer.ts           # Parallel execution
+│   │   ├── smart-batcher.ts               # Batch processing
+│   │   ├── task-queue.ts                  # Task queue management
+│   │   └── workflow-orchestrator.ts       # Workflow coordination
+│   ├── processors/
+│   │   └── violation-processor.ts         # Violation processing
+│   ├── reporting/
+│   │   └── pdf-generators/
+│   │       ├── pdf-orchestrator.ts        # PDF generation orchestration
+│   │       └── pdf-template-generator.ts  # PDF template creation
+│   ├── runners/
+│   │   ├── axe-test-runner.ts             # axe-core integration
+│   │   └── pa11y-test-runner.ts           # Pa11y integration
+│   └── services/
+│       ├── configuration-service.ts       # Configuration management
+│       ├── error-handler-service.ts       # Error handling & logging
+│       ├── file-operations-service.ts     # File system operations
+│       └── security-validation-service.ts # Security validation
 
 tests/
 ├── setup.ts                               # Global test setup and utilities
@@ -84,9 +74,18 @@ tests/
 │       └── violation-processor.test.ts    # ViolationProcessor tests (9 tests passing)
 ├── e2e/
 │   ├── README.md                          # E2E testing documentation
-│   └── web-interface.test.ts              # Web interface E2E tests (24 tests across 3 browsers)
+│   ├── web-interface.test.ts              # Web interface E2E tests (24 tests across 3 browsers)
+│   └── interface-accessibility.test.ts    # Accessibility E2E tests (23 tests covering WCAG 2.1 AAA)
 └── integration/
     └── services-integration.test.ts       # Cross-service integration tests (21 tests passing)
+
+.github/
+├── workflows/
+│   ├── ci.yml                             # Comprehensive CI pipeline (301+ tests)
+│   ├── deploy.yml                         # Automated deployment pipeline
+│   ├── accessibility.yml                  # WCAG 2.1 AAA compliance monitoring
+│   └── dependencies.yml                   # Security and dependency management
+└── README.md                              # CI/CD workflows documentation
 ```
 
 ## 🔄 Import Dependency Graph
@@ -432,3 +431,48 @@ WorkflowOrchestrator
 3. **Analysis**: `getPage('analysis-*')` → `closePage('analysis-*')`
 4. **PDF Generation**: `getPage('pdf-generation')` → `cleanup('pdf-generation')`
 5. **Final Cleanup**: `cleanupAll()` (only at end of entire workflow) 
+
+### CI/CD Workflow Dependencies
+
+**`.github/workflows/`** - **GitHub Actions CI/CD Workflows**
+- **`ci.yml`**: Comprehensive testing pipeline
+  - **Triggers**: Pull requests, pushes to main/develop
+  - **Dependencies**: All test suites, build processes
+  - **Artifacts**: Test reports, coverage data, build previews
+  - **Quality Gates**: 301+ tests, accessibility compliance, security audit
+
+- **`deploy.yml`**: Automated deployment pipeline
+  - **Triggers**: Merges to main branch
+  - **Dependencies**: Pre-deployment tests, build processes
+  - **Artifacts**: Release packages, GitHub releases
+  - **Quality Gates**: Security scan, documentation validation
+
+- **`accessibility.yml`**: WCAG 2.1 AAA compliance monitoring
+  - **Triggers**: PRs, pushes, weekly schedule
+  - **Dependencies**: E2E accessibility tests, cross-browser testing
+  - **Artifacts**: Accessibility reports, compliance metrics
+  - **Quality Gates**: 23 accessibility tests, cross-browser compatibility
+
+- **`dependencies.yml`**: Security and dependency management
+  - **Triggers**: Weekly schedule, package.json changes
+  - **Dependencies**: Security audit tools, dependency scanners
+  - **Artifacts**: Security reports, dependency health metrics
+  - **Quality Gates**: Vulnerability scanning, dependency updates
+
+**Workflow Integration Points**:
+```
+GitHub Events → Workflow Triggers → Quality Gates → Artifacts → Reports
+     │
+     ├── Pull Requests → CI Pipeline → Test Results → Build Preview
+     ├── Main Branch → Deploy Pipeline → Release Creation → GitHub Release
+     ├── Weekly Schedule → Accessibility Pipeline → Compliance Reports
+     └── Package Changes → Dependencies Pipeline → Security Reports
+```
+
+**Quality Gate Dependencies**:
+- **Test Coverage**: All 301+ tests must pass
+- **Accessibility**: WCAG 2.1 AAA compliance verified
+- **Security**: Vulnerability scanning and audit
+- **Cross-browser**: Tests run on Chrome, Firefox, Safari
+- **Documentation**: Validation and consistency checks
+- **Performance**: Build and test performance optimized 

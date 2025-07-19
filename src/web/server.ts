@@ -30,6 +30,7 @@ export class WebServer {
         this.errorHandler = ErrorHandlerService.getInstance();
         this.config = ConfigurationService.getInstance();
         this.setupMiddleware();
+        this.setupStaticFiles();
         this.setupRoutes();
         this.setupWebSocket();
     }
@@ -37,7 +38,6 @@ export class WebServer {
     private setupMiddleware(): void {
         this.app.use(cors());
         this.app.use(bodyParser.json());
-        this.app.use(express.static(path.join(__dirname, '../public')));
     }
 
     private setupWebSocket(): void {

@@ -26,11 +26,6 @@ This directory contains comprehensive documentation for the accessibility testin
   - **Contains**: Critical information, common operations, file locations, troubleshooting
   - **When to use**: Daily reference, quick lookups, troubleshooting issues
 
-- **[`TESTING_ROADMAP.md`](TESTING_ROADMAP.md)** - Testing strategy and coverage plan
-  - **Purpose**: Comprehensive testing roadmap and coverage targets
-  - **Contains**: Current state assessment, 4-phase implementation plan, testing best practices
-  - **When to use**: Understanding testing strategy, fixing tests, achieving coverage targets
-
 ### 📖 Project Documentation
 
 - **[`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md)** - High-level project understanding
@@ -92,7 +87,7 @@ npm run docs:all
 2. `src/utils/services/error-handler-service.ts` - Central error handling
 3. `src/utils/services/configuration-service.ts` - Configuration management
 4. `src/web/server.ts` - Main web interface entry point
-5. `tests/` directory - Unit, integration, and E2E tests
+5. `tests/` directory - Unit, integration, and E2E tests (367+ tests total)
 6. `jest.config.js` - Unit and integration testing framework configuration
 7. `playwright.config.ts` - E2E testing framework configuration
 
@@ -125,7 +120,6 @@ docs/
 ├── ARCHITECTURE_DIAGRAM.md      # Visual architecture
 ├── QUICK_REFERENCE.md           # Fast reference guide
 ├── PROJECT_OVERVIEW.md          # High-level understanding
-├── TESTING_ROADMAP.md           # Testing strategy and coverage plan
 └── DOCUMENTATION_SYSTEM.md      # System overview
 ```
 
@@ -150,7 +144,6 @@ docs/
 - Update `AI_DEVELOPMENT_GUIDE.md` if patterns change
 
 ### For Testing Changes
-- Update `TESTING_ROADMAP.md` with new test coverage information
 - Update `DEPENDENCY_MAP.md` with test file dependencies
 - Update `QUICK_REFERENCE.md` with testing patterns
 - Update `AI_DEVELOPMENT_GUIDE.md` with testing rules

@@ -12,8 +12,9 @@ Before making any changes, **ALWAYS** consult these documents:
 2. **`ARCHITECTURE_DIAGRAM.md`** - Visual system architecture and data flow
 3. **`QUICK_REFERENCE.md`** - Fast answers to common questions and operations
 4. **`PROJECT_OVERVIEW.md`** - High-level project understanding
-5. **`TESTING_ROADMAP.md`** - Testing strategy and coverage plan
+5. **`tests/e2e/README.md`** - E2E testing strategy and coverage plan
 6. **`README.md`** - User-facing documentation and features
+7. **`.github/README.md`** - GitHub Actions CI/CD workflows documentation
 
 ## 🚨 Critical Rules (NEVER BREAK)
 
@@ -111,7 +112,7 @@ npm test
 // ✅ ALWAYS check test coverage
 npm run test:coverage
 
-// ✅ ALWAYS follow testing patterns from TESTING_ROADMAP.md
+// ✅ ALWAYS follow testing patterns from tests/e2e/README.md
 // - Use Jest for unit testing (70% of tests)
 // - Use Jest for integration testing (20% of tests)
 // - Use Playwright for E2E testing (5% of tests)
@@ -125,17 +126,52 @@ npm run test:coverage
 // - Use (global as any).testUtils.cleanupTempHtmlFiles() for HTML cleanup
 // - Temporary files are automatically cleaned up after tests
 // - Jest timeout issues resolved with proper clearTimeout calls
-// - All 292 tests pass without worker process errors
+// - All 301 tests pass without worker process errors
 
 // ✅ E2E Testing Commands
 npm run test:e2e          # Run all E2E tests
 npm run test:e2e:ui       # Interactive E2E testing
 npm run test:e2e:headed   # Headed mode E2E testing
 
+// ✅ Accessibility Testing
+// - 23 E2E accessibility tests covering WCAG 2.1 AAA compliance
+// - Page Object Model (POM) design pattern implementation
+// - Cross-browser testing (Chrome, Firefox, Safari)
+// - Form validation, keyboard navigation, screen reader compatibility
+// - Focus management, error handling, responsive design
+
 // ❌ NEVER break existing tests without fixing them
 // ❌ NEVER ignore TypeScript compilation errors in tests
 // ❌ NEVER leave temporary files behind (HTML files, test directories)
 // ❌ NEVER leave setTimeout calls without proper cleanup
+```
+
+### 8. CI/CD Workflows
+```yaml
+# ✅ ALWAYS ensure changes work with GitHub Actions
+# - CI Pipeline (ci.yml): Runs on PRs and pushes to main/develop
+# - Deploy Pipeline (deploy.yml): Runs on merges to main
+# - Accessibility Pipeline (accessibility.yml): WCAG 2.1 AAA compliance
+# - Dependencies Pipeline (dependencies.yml): Security and dependency management
+
+# ✅ ALWAYS check workflow requirements
+# - All 301+ tests must pass
+# - WCAG 2.1 AAA compliance verified
+# - Cross-browser compatibility (Chrome, Firefox, Safari)
+# - Security audit passes
+# - Documentation validation succeeds
+
+# ✅ ALWAYS follow CI/CD best practices
+# - Write tests for new features
+# - Update documentation for changes
+# - Ensure accessibility compliance
+# - Check security implications
+# - Verify cross-browser compatibility
+
+# ❌ NEVER push changes that break CI/CD
+# ❌ NEVER ignore workflow failures
+# ❌ NEVER bypass quality gates
+# ❌ NEVER skip accessibility testing
 ```
 
 ## 🔍 Pre-Change Checklist
