@@ -56,7 +56,7 @@ test.describe('Pa11y Accessibility Analysis', () => {
     expect(pages.length).toBeGreaterThan(0);
 
     // Step 2: Run Pa11y analysis on all pages
-    console.log('\n🔍 Phase 2: Running Pa11y analysis on all discovered pages...');
+    console.log('\n🏃‍♂️ Phase 2: Running Pa11y accessibility analysis on all discovered pages...');
 
     const pa11yResults = [];
     const urls = pages.map(p => p.url);

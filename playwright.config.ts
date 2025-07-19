@@ -26,8 +26,7 @@ export default defineConfig({
   /* Global timeout for entire test run - scales with site size */
   globalTimeout: 3_600_000, // 1 hour for entire test suite (restored for large sites)
 
-  /* Global teardown to ensure clean exit */
-  globalTeardown: require.resolve('./playwright/tests/utils/global-teardown.ts'),
+
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

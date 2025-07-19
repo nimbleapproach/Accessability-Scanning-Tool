@@ -56,7 +56,7 @@ test.describe('Axe-Core Accessibility Analysis', () => {
     expect(pages.length).toBeGreaterThan(0);
 
     // Step 2: Run axe-core analysis on all pages
-    console.log('\n🔍 Phase 2: Running axe-core analysis on all discovered pages...');
+    console.log('\n🏃‍♂️ Phase 2: Running Axe-core accessibility analysis on all discovered pages...');
 
     const axeResults = [];
     const urls = pages.map(p => p.url);
