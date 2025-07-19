@@ -12,7 +12,8 @@ Before making any changes, **ALWAYS** consult these documents:
 2. **`ARCHITECTURE_DIAGRAM.md`** - Visual system architecture and data flow
 3. **`QUICK_REFERENCE.md`** - Fast answers to common questions and operations
 4. **`PROJECT_OVERVIEW.md`** - High-level project understanding
-5. **`README.md`** - User-facing documentation and features
+5. **`TESTING_ROADMAP.md`** - Testing strategy and coverage plan
+6. **`README.md`** - User-facing documentation and features
 
 ## 🚨 Critical Rules (NEVER BREAK)
 
@@ -102,6 +103,24 @@ const setting = configService.get('settingName', defaultValue);
 const setting = 'hardcoded-value'; // BREAKS CONFIGURATION
 ```
 
+### 7. Testing Framework
+```typescript
+// ✅ ALWAYS run tests before making changes
+npm test
+
+// ✅ ALWAYS check test coverage
+npm run test:coverage
+
+// ✅ ALWAYS follow testing patterns from TESTING_ROADMAP.md
+// - Use Jest for unit testing
+// - Mock external dependencies with `any` types
+// - Test public interfaces, not implementation details
+// - Follow singleton pattern verification
+
+// ❌ NEVER break existing tests without fixing them
+// ❌ NEVER ignore TypeScript compilation errors in tests
+```
+
 ## 🔍 Pre-Change Checklist
 
 Before making ANY changes, verify:
@@ -117,6 +136,8 @@ Before making ANY changes, verify:
 - [ ] `src/utils/services/error-handler-service.ts` - Is error handling affected?
 - [ ] `src/utils/services/configuration-service.ts` - Is configuration involved?
 - [ ] `src/cli/accessibility-test-cli.ts` - Is CLI functionality affected?
+- [ ] `tests/` directory - Are tests being modified or added?
+- [ ] `jest.config.js` - Is testing configuration affected?
 
 ### 3. Verify Import Patterns
 - [ ] Are imports using correct patterns (`@/` vs `../`)?
@@ -268,6 +289,12 @@ After making changes, always run:
 ```bash
 # TypeScript compilation check
 npm run typecheck
+
+# Run all tests
+npm test
+
+# Check test coverage
+npm run test:coverage
 
 # CLI functionality test
 npm run cli

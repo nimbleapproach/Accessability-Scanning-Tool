@@ -7,6 +7,8 @@
 2. **`src/utils/services/error-handler-service.ts`** - Central error handling
 3. **`src/utils/services/configuration-service.ts`** - Configuration management
 4. **`src/web/server.ts`** - Main web server entry point
+5. **`tests/` directory** - Unit and integration tests
+6. **`jest.config.js`** - Testing framework configuration
 
 ### Singleton Services (Use `getInstance()`)
 ```typescript
@@ -109,6 +111,29 @@ const setting = configService.get('settingName', defaultValue);
 
 // ❌ NEVER hardcode values
 const setting = 'hardcoded-value';
+```
+
+### Testing Pattern
+```typescript
+// ✅ CORRECT - Run tests before making changes
+npm test
+
+// ✅ CORRECT - Check test coverage
+npm run test:coverage
+
+// ✅ CORRECT - Run specific test categories
+npm run test:unit
+npm run test:integration
+npm run test:services
+
+// ✅ CORRECT - Follow testing patterns from TESTING_ROADMAP.md
+// - Use Jest for unit testing
+// - Mock external dependencies with `any` types
+// - Test public interfaces, not implementation details
+// - Follow singleton pattern verification
+
+// ❌ NEVER break existing tests without fixing them
+// ❌ NEVER ignore TypeScript compilation errors in tests
 ```
 
 ### File Operations Pattern

@@ -199,6 +199,34 @@ common.ts (Types)
     │   ├── All Utilities
     │   └── All Runners
     │
+    └── Testing Framework
+        ├── Jest Configuration
+        ├── Test Utilities
+        ├── Unit Tests
+        └── Integration Tests
+```
+
+### Testing Architecture
+```
+Jest Framework
+    │
+    ├── Unit Tests
+    │   ├── Core Services (ErrorHandler, Configuration, Security, FileOps)
+    │   ├── Core Types (common.ts validation)
+    │   ├── Processors (ViolationProcessor)
+    │   └── Runners (AxeTestRunner, Pa11yTestRunner)
+    │
+    ├── Integration Tests
+    │   ├── Cross-service communication
+    │   ├── Singleton pattern verification
+    │   └── End-to-end workflows
+    │
+    └── Test Utilities
+        ├── Global test helpers
+        ├── Mock data creation
+        └── Performance testing
+```
+    │
     ├── ConfigurationService
     │   ├── BrowserManager
     │   ├── SiteCrawler

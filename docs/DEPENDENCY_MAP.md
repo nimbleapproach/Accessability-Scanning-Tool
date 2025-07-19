@@ -49,6 +49,22 @@ src/
         ├── error-handler-service.ts       # Error handling & logging
         ├── file-operations-service.ts     # File system operations
         └── security-validation-service.ts # Security validation
+
+tests/
+├── setup.ts                               # Global test setup and utilities
+├── unit/
+│   ├── core/
+│   │   └── types/
+│   │       └── common.test.ts             # Core types validation tests
+│   ├── services/
+│   │   ├── error-handler-service.test.ts  # ErrorHandlerService tests
+│   │   ├── configuration-service.test.ts  # ConfigurationService tests
+│   │   ├── security-validation-service.test.ts # SecurityValidationService tests
+│   │   └── file-operations-service.test.ts # FileOperationsService tests
+│   └── processors/
+│       └── violation-processor.test.ts    # ViolationProcessor tests
+└── integration/
+    └── services-integration.test.ts       # Cross-service integration tests
 ```
 
 ## 🔄 Import Dependency Graph
