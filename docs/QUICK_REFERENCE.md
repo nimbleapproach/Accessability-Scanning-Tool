@@ -126,14 +126,40 @@ npm run test:unit
 npm run test:integration
 npm run test:services
 
+// ✅ CORRECT - E2E Testing Commands
+npm run test:e2e          # Run all E2E tests
+npm run test:e2e:ui       # Interactive E2E testing
+npm run test:e2e:headed   # Headed mode E2E testing
+
+// ✅ CORRECT - Storybook Component Testing Commands
+npm run storybook          # Start Storybook development server
+npm run build-storybook    # Build Storybook for production
+npm run test-storybook     # Run Storybook tests
+
 // ✅ CORRECT - Follow testing patterns from TESTING_ROADMAP.md
-// - Use Jest for unit testing
+// - Use Jest for unit testing (70% of tests)
+// - Use Jest for integration testing (20% of tests)
+// - Use Storybook for component testing (5% of tests)
+// - Use Playwright for E2E testing (5% of tests)
 // - Mock external dependencies with `any` types
 // - Test public interfaces, not implementation details
 // - Follow singleton pattern verification
+// - Avoid creating unnecessary test directories in memory tests
+// - Use test utilities for cleanup (createTempDir, cleanupTempHtmlFiles)
+// - Use Storybook for accessibility validation and visual regression testing
+
+// ✅ CORRECT - Test Cleanup
+// - Use (global as any).testUtils.createTempDir() for test directories
+// - Use (global as any).testUtils.cleanupTempHtmlFiles() for HTML cleanup
+// - Temporary files are automatically cleaned up after tests
+// - Jest timeout issues resolved with proper clearTimeout calls
+// - All 301 tests pass without worker process errors (214 unit + 47 integration + 9 component + 31 validation)
 
 // ❌ NEVER break existing tests without fixing them
 // ❌ NEVER ignore TypeScript compilation errors in tests
+// ❌ NEVER create thousands of test directories for memory testing
+// ❌ NEVER leave temporary files behind (HTML files, test directories)
+// ❌ NEVER leave setTimeout calls without proper cleanup
 ```
 
 ### File Operations Pattern
@@ -267,6 +293,13 @@ try {
 - **HTML**: `src/public/index.html`
 - **CSS**: `src/public/styles.css`
 - **JavaScript**: `src/public/app.js`
+
+### Testing
+- **Unit Tests**: `tests/unit/`
+- **Integration Tests**: `tests/integration/`
+- **E2E Tests**: `tests/e2e/`
+- **Test Setup**: `tests/setup.ts`
+- **Playwright Config**: `playwright.config.ts`
 
 ## 🔍 Common Issues & Solutions
 
@@ -421,7 +454,62 @@ export interface MyNewInterface {
 }
 ```
 
+### Component Architecture Pattern (NEW)
+```typescript
+// ✅ CORRECT - Component structure
+export interface ComponentProps {
+  // Component-specific props
+}
+
+export function renderComponent(props: ComponentProps): string {
+  return `
+    <div class="component-class">
+      <!-- Component HTML -->
+    </div>
+  `;
+}
+
+// ✅ CORRECT - Component usage in web interface
+import { renderHeader } from '@/components/Header';
+const headerHtml = renderHeader({ title: 'Accessibility Scanner' });
+
+// ✅ CORRECT - Component usage in Storybook
+import { renderHeader } from '../src/components/Header';
+export default {
+  title: 'Components/Header',
+  component: renderHeader,
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'heading-order', enabled: true }
+        ]
+      }
+    }
+  }
+} as Meta<typeof renderHeader>;
+
+// ✅ CORRECT - Component exports
+// src/components/index.ts
+export { renderHeader } from './Header';
+export { renderScanOptions } from './ScanOptions';
+export { renderProgressSection } from './ProgressSection';
+export { renderResultsSection } from './ResultsSection';
+export { renderErrorSection } from './ErrorSection';
+export { renderFooter } from './Footer';
+export { renderWebInterface } from './WebInterface';
+
+// ✅ CORRECT - Shared CSS
+// Both web interface and Storybook use: src/public/styles.css
+// No duplicate CSS files needed
+
+// ❌ NEVER create duplicate component files
+// ❌ NEVER use different CSS files for web interface vs Storybook
+// ❌ NEVER use JavaScript components when TypeScript is available
+```
+
 ---
 
-**Last Updated**: 18/12/2024 14:30 GMT
+**Last Updated**: 19/12/2024 15:30 GMT
 **Purpose**: Quick reference for common operations and troubleshooting
