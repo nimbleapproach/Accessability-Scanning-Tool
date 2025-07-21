@@ -59,11 +59,22 @@ jobs:
         restore-keys: |
           accessibility-reports-${{ runner.os }}-
 
+    - name: Cache TypeScript build
+      uses: actions/cache@v4
+      with:
+        path: dist
+        key: typescript-build-${{ runner.os }}-${{ hashFiles('**/*.ts', '**/tsconfig.json') }}
+        restore-keys: |
+          typescript-build-${{ runner.os }}-
+
     - name: Install dependencies
-      run: npm ci --only=production
+      run: npm run install:robust
 
     - name: Install Playwright browsers
       run: npx playwright install --with-deps ${{ matrix.browser }}
+
+    - name: Build application
+      run: npm run build
 
     - name: Run accessibility tests on ${{ matrix.browser }}
       run: npx playwright test tests/e2e/interface-accessibility.test.ts --project=${{ matrix.browser }}
@@ -105,11 +116,22 @@ jobs:
         restore-keys: |
           playwright-${{ runner.os }}-
 
+    - name: Cache TypeScript build
+      uses: actions/cache@v4
+      with:
+        path: dist
+        key: typescript-build-${{ runner.os }}-${{ hashFiles('**/*.ts', '**/tsconfig.json') }}
+        restore-keys: |
+          typescript-build-${{ runner.os }}-
+
     - name: Install dependencies
-      run: npm ci --only=production
+      run: npm run install:robust
 
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
+
+    - name: Build application
+      run: npm run build
 
     - name: Run comprehensive accessibility tests
       run: |
@@ -175,7 +197,7 @@ jobs:
           accessibility-monitoring-${{ runner.os }}-
 
     - name: Install dependencies
-      run: npm ci --only=production
+      run: npm run install:robust
 
     - name: Run accessibility monitoring
       run: |

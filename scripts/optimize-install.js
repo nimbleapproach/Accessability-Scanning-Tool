@@ -9,10 +9,20 @@ console.log('🚀 Optimizing npm installation...');
 const startTime = Date.now();
 
 try {
-  // Check if package-lock.json exists
+  // Check if package-lock.json exists and is valid
   if (!fs.existsSync('package-lock.json')) {
     console.log('⚠️  No package-lock.json found, generating...');
     execSync('npm install --package-lock-only', { stdio: 'inherit' });
+  } else {
+    // Try to validate package-lock.json
+    try {
+      execSync('npm ci --dry-run --omit=dev', { stdio: 'pipe' });
+      console.log('✅ Package-lock.json is valid');
+    } catch (error) {
+      console.log('⚠️  Package-lock.json appears corrupted, regenerating...');
+      fs.unlinkSync('package-lock.json');
+      execSync('npm install --package-lock-only', { stdio: 'inherit' });
+    }
   }
 
   // Install production dependencies and essential dev dependencies

@@ -186,6 +186,7 @@ npm run verify-build    # Validates build output
 
 # ✅ Optimized installation scripts
 npm run install:optimized  # Fast CI installation (~27 seconds)
+npm run install:robust     # Robust installation with error handling
 npm run install:minimal    # Production dependencies only
 npm run install:dev        # Include dev dependencies
 npm run install:storybook  # Install Storybook dependencies
@@ -195,6 +196,7 @@ npm run install:storybook  # Install Storybook dependencies
 # scripts/build-setup.js - Directory structure validation
 # scripts/verify-build.js - Build output verification
 # scripts/optimize-install.js - Optimized dependency installation
+# scripts/robust-install.js - Robust installation with error handling
 
 # ✅ GitHub Actions compatibility
 # - Build process works in clean CI environment
@@ -202,12 +204,35 @@ npm run install:storybook  # Install Storybook dependencies
 # - Graceful handling of missing directories
 # - Comprehensive build verification
 # - Optimized dependency installation (80% faster)
+# - Robust error handling for corrupted package-lock.json
 
 # ❌ DON'T modify build scripts without testing
 # ❌ DON'T remove public directory copying
 # ❌ DON'T bypass build verification
 # ❌ DON'T add heavy dependencies without optimization
+# ❌ DON'T run E2E tests without building first
 # Build process is critical for GitHub Actions workflows
+```
+
+### 10. E2E Testing Requirements
+```bash
+# ✅ ALWAYS build before running E2E tests
+npm run build  # Must be run before E2E tests
+npm run test:e2e  # Requires built application
+
+# ✅ Playwright configuration expects built server
+# - webServer.command: 'npm start'
+# - Requires dist/web/server.js to exist
+# - Base URL: http://localhost:3000
+
+# ✅ Workflow order must be:
+# 1. Install dependencies
+# 2. Build application
+# 3. Run E2E tests
+
+# ❌ NEVER run E2E tests without building first
+# ❌ NEVER skip build step in CI workflows
+# E2E tests require the built application to be available
 ```
 
 ## 🔍 Pre-Change Checklist
