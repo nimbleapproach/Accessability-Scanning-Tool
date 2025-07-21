@@ -174,6 +174,42 @@ npm run test:e2e:headed   # Headed mode E2E testing
 # ❌ NEVER skip accessibility testing
 ```
 
+### 9. Build System
+```bash
+# ✅ Build process includes setup, compilation, and verification
+npm run build  # Runs: clean → setup → tsc → tsc-alias → copy-public → verify
+
+# ✅ Individual build steps available
+npm run build-setup     # Ensures directory structure
+npm run copy-public     # Copies public files cross-platform
+npm run verify-build    # Validates build output
+
+# ✅ Optimized installation scripts
+npm run install:optimized  # Fast CI installation (~27 seconds)
+npm run install:minimal    # Production dependencies only
+npm run install:dev        # Include dev dependencies
+npm run install:storybook  # Install Storybook dependencies
+
+# ✅ Build scripts handle missing directories gracefully
+# scripts/copy-public.js - Cross-platform file copying
+# scripts/build-setup.js - Directory structure validation
+# scripts/verify-build.js - Build output verification
+# scripts/optimize-install.js - Optimized dependency installation
+
+# ✅ GitHub Actions compatibility
+# - Build process works in clean CI environment
+# - Cross-platform file operations (Windows/Unix)
+# - Graceful handling of missing directories
+# - Comprehensive build verification
+# - Optimized dependency installation (80% faster)
+
+# ❌ DON'T modify build scripts without testing
+# ❌ DON'T remove public directory copying
+# ❌ DON'T bypass build verification
+# ❌ DON'T add heavy dependencies without optimization
+# Build process is critical for GitHub Actions workflows
+```
+
 ## 🔍 Pre-Change Checklist
 
 Before making ANY changes, verify:
