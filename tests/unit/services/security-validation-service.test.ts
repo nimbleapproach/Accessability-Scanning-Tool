@@ -101,7 +101,7 @@ describe('SecurityValidationService', () => {
 
     describe('validateFilePath', () => {
         test('should validate valid file paths', () => {
-            const result = securityService.validateFilePath('test-file.json');
+            const result = securityService.validateFilePath('tests/fixtures/test-file.json');
 
             expect(result.isValid).toBe(true);
             expect(result.sanitizedValue).toBeDefined();
@@ -160,15 +160,15 @@ describe('SecurityValidationService', () => {
             expect(result.sanitizedValue).toBeDefined();
         });
 
-            test('should validate paths within base directory', () => {
-      const baseDir = '/allowed/path';
-      const result = securityService.validateFilePath('subdir/file.txt', baseDir);
-      
-      // This should work as the path is relative and will be resolved within the base
-      // The actual behavior depends on the current working directory, so we'll test the structure
-      expect(result.isValid).toBeDefined();
-      expect(typeof result.isValid).toBe('boolean');
-    });
+        test('should validate paths within base directory', () => {
+            const baseDir = '/allowed/path';
+            const result = securityService.validateFilePath('subdir/file.txt', baseDir);
+
+            // This should work as the path is relative and will be resolved within the base
+            // The actual behavior depends on the current working directory, so we'll test the structure
+            expect(result.isValid).toBeDefined();
+            expect(typeof result.isValid).toBe('boolean');
+        });
     });
 
     describe('sanitizeInput', () => {
@@ -242,19 +242,19 @@ describe('SecurityValidationService', () => {
             expect(result.sanitizedValue).toBeDefined();
         });
 
-            test('should sanitize dangerous user input', () => {
-      const result = securityService.validateUserInput('<script>alert("xss")</script>');
-      
-      expect(result.isValid).toBe(false);
-      expect(result.error).toContain('dangerous script tags');
-    });
+        test('should sanitize dangerous user input', () => {
+            const result = securityService.validateUserInput('<script>alert("xss")</script>');
 
-    test('should handle empty user input', () => {
-      const result = securityService.validateUserInput('');
-      
-      expect(result.isValid).toBe(true);
-      expect(result.sanitizedValue).toBe('');
-    });
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('dangerous script tags');
+        });
+
+        test('should handle empty user input', () => {
+            const result = securityService.validateUserInput('');
+
+            expect(result.isValid).toBe(true);
+            expect(result.sanitizedValue).toBe('');
+        });
     });
 
     describe('Edge Cases', () => {

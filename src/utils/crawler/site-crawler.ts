@@ -1,7 +1,7 @@
-import { Page, Locator } from 'playwright';
-import { ErrorHandlerService } from '../services/error-handler-service';
-import { ConfigurationService } from '../services/configuration-service';
-import { CrawlOptions } from '../../core/types/common';
+import { Page, Locator } from '@playwright/test';
+import { ErrorHandlerService } from '@/utils/services/error-handler-service';
+import { ConfigurationService } from '@/utils/services/configuration-service';
+import { CrawlOptions } from '@/core/types/common';
 
 export interface CrawlResult {
   url: string;
@@ -47,11 +47,11 @@ export class SiteCrawler {
       timeoutMs = 20000, // Reduced from 30000ms
     } = options;
 
-    console.log(`🕷️  Starting optimised site crawl from: ${this.baseUrl}`);
-    console.log(`📊 Max pages: ${maxPages}, Max depth: ${maxDepth}, Timeout: ${timeoutMs}ms`);
+    this.errorHandler.logInfo(`🕷️  Starting optimised site crawl from: ${this.baseUrl}`);
+    this.errorHandler.logInfo(`📊 Max pages: ${maxPages}, Max depth: ${maxDepth}, Timeout: ${timeoutMs}ms`);
 
     if (respectRobotsTxt) {
-      console.log(`🤖 Robots.txt compliance enabled - will check for crawling restrictions`);
+      this.errorHandler.logInfo(`🤖 Robots.txt compliance enabled - will check for crawling restrictions`);
       // Note: In a full implementation, we would fetch and parse robots.txt here
       // For now, we just log that it's enabled
     }
@@ -75,7 +75,7 @@ export class SiteCrawler {
       }
 
       processedCount++;
-      console.log(`📄 Crawling (${processedCount}/${maxPages}) depth ${depth}: ${url}`);
+      this.errorHandler.logInfo(`📄 Crawling (${processedCount}/${maxPages}) depth ${depth}: ${url}`);
 
       try {
         const retryResult = await this.errorHandler.retryWithBackoff(
@@ -112,7 +112,7 @@ export class SiteCrawler {
           await this.delay(delayBetweenRequests);
         }
       } catch (error) {
-        console.error(`❌ Error crawling ${url} after retries:`, error);
+        this.errorHandler.logError(`Error crawling ${url} after retries`, error);
         this.results.push({
           url,
           title: '',
@@ -132,28 +132,28 @@ export class SiteCrawler {
       return a.url.localeCompare(b.url);
     });
 
-    console.log(`✅ Optimised crawl complete! Found ${this.results.length} pages`);
-    console.log(`📊 Performance summary:`);
-    console.log(
+    this.errorHandler.logSuccess(`✅ Optimised crawl complete! Found ${this.results.length} pages`);
+    this.errorHandler.logInfo(`📊 Performance summary:`);
+    this.errorHandler.logInfo(
       `   🎯 Success rate: ${Math.round((this.results.filter(r => r.status === 200).length / this.results.length) * 100)}%`
     );
-    console.log(`   ⚡ Average load time: ${this.getAverageLoadTime()}ms`);
-    console.log(
+    this.errorHandler.logInfo(`   ⚡ Average load time: ${this.getAverageLoadTime()}ms`);
+    this.errorHandler.logInfo(
       `   🔄 Total retries: ${this.results.reduce((sum, r) => sum + (r.retryCount || 0), 0)}`
     );
 
     // Log errors if any
     if (this.errors.length > 0) {
-      console.log(`   ❌ Errors encountered: ${this.errors.length}`);
+      this.errorHandler.logWarning(`   ❌ Errors encountered: ${this.errors.length}`);
       this.errors.forEach(error => {
-        console.log(`     - ${error.url}: ${error.error} (${error.retryCount} retries)`);
+        this.errorHandler.logWarning(`     - ${error.url}: ${error.error} (${error.retryCount} retries)`);
       });
     }
 
     for (let d = 0; d <= maxDepth; d++) {
       const count = this.results.filter(r => r.depth === d && r.status === 200).length;
       if (count > 0) {
-        console.log(`   Depth ${d}: ${count} pages`);
+        this.errorHandler.logInfo(`   Depth ${d}: ${count} pages`);
       }
     }
 
@@ -229,7 +229,7 @@ export class SiteCrawler {
 
       return links;
     } catch (error) {
-      console.warn(`⚠️  Failed to extract links from ${currentUrl}:`, error);
+      this.errorHandler.logWarning(`Failed to extract links from ${currentUrl}`, error);
       return [];
     }
   }

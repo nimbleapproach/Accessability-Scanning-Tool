@@ -1,57 +1,27 @@
-#!/usr/bin/env node
-
 const fs = require('fs');
 const path = require('path');
 
-const srcDir = path.join(__dirname, '..', 'src', 'public');
-const destDir = path.join(__dirname, '..', 'dist', 'public');
-
-console.log('🔧 Copying public files...');
-console.log(`Source: ${srcDir}`);
-console.log(`Destination: ${destDir}`);
-
-function copyFileSync(source, dest) {
-  const destFile = path.join(dest, path.basename(source));
-  fs.copyFileSync(source, destFile);
-  console.log(`📄 Copied: ${path.basename(source)}`);
-}
-
-function copyDirectorySync(source, dest) {
-  // Create destination directory if it doesn't exist
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-    console.log('📁 Created destination directory');
-  }
-
-  // Read source directory
-  const files = fs.readdirSync(source);
-  
-  files.forEach(file => {
-    const sourcePath = path.join(source, file);
-    const destPath = path.join(dest, file);
-    
-    const stat = fs.statSync(sourcePath);
-    
-    if (stat.isDirectory()) {
-      // Recursively copy subdirectories
-      copyDirectorySync(sourcePath, destPath);
-    } else {
-      // Copy file
-      copyFileSync(sourcePath, dest);
-    }
-  });
-}
+const sourceDir = path.join(__dirname, '..', 'src', 'public');
+const targetDir = path.join(__dirname, '..', 'dist', 'public');
 
 try {
-  // Check if source directory exists
-  if (!fs.existsSync(srcDir)) {
-    console.log('⚠️  Warning: src/public directory not found, skipping copy');
-    process.exit(0);
+  // Create target directory if it doesn't exist
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  // Copy directory using pure Node.js
-  copyDirectorySync(srcDir, destDir);
-  
+  // Copy all files from src/public to dist/public
+  const files = fs.readdirSync(sourceDir);
+  files.forEach(file => {
+    const sourcePath = path.join(sourceDir, file);
+    const targetPath = path.join(targetDir, file);
+    
+    if (fs.statSync(sourcePath).isFile()) {
+      fs.copyFileSync(sourcePath, targetPath);
+      console.log(`Copied: ${file}`);
+    }
+  });
+
   console.log('✅ Public files copied successfully');
 } catch (error) {
   console.error('❌ Error copying public files:', error.message);

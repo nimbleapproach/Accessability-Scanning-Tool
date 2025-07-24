@@ -139,7 +139,7 @@ describe('Services Integration', () => {
         });
 
         test('should validate file paths consistently', () => {
-            const validPath = 'test-file.json';
+            const validPath = 'tests/fixtures/test-file.json';
             const invalidPath = '../sensitive-file.txt';
 
             const validResult = securityService.validateFilePath(validPath);
@@ -213,7 +213,7 @@ describe('Services Integration', () => {
         });
 
         test('should integrate security validation with file operations', () => {
-            const validPath = 'test-file.json';
+            const validPath = 'tests/fixtures/test-file.json';
             const invalidPath = '../sensitive-file.txt';
 
             const pathValidation = securityService.validateFilePath(validPath);

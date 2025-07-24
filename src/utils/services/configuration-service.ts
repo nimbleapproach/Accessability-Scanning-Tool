@@ -140,6 +140,34 @@ export class ConfigurationService {
   }
 
   /**
+   * Gets a configuration value by key, with support for environment variables
+   * @param key The configuration key to retrieve
+   * @param defaultValue Optional default value if key is not found
+   * @returns The configuration value or default value
+   */
+  public get(key: string, defaultValue?: string): string | undefined {
+    // First check environment variables
+    const envValue = process.env[key];
+    if (envValue !== undefined) {
+      return envValue;
+    }
+
+    // Then check if it's a nested configuration key
+    const keys = key.split('.');
+    let current: any = this.config;
+    
+    for (const k of keys) {
+      if (current && typeof current === 'object' && k in current) {
+        current = current[k];
+      } else {
+        return defaultValue;
+      }
+    }
+    
+    return current !== undefined ? String(current) : defaultValue;
+  }
+
+  /**
    * Updates the configuration with new values
    * @param updates Partial configuration updates to apply
    */

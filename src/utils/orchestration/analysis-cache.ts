@@ -6,9 +6,9 @@ import {
   CachedResult,
   CacheMetadata,
   CachePerformance,
-} from '../../core/types/common';
-import { ErrorHandlerService } from '../services/error-handler-service';
-import { ConfigurationService } from '../services/configuration-service';
+} from '@/core/types/common';
+import { ErrorHandlerService } from '@/utils/services/error-handler-service';
+import { ConfigurationService } from '@/utils/services/configuration-service';
 
 export class AnalysisCache extends EventEmitter {
   private static instance: AnalysisCache;

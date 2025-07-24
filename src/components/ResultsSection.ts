@@ -42,8 +42,6 @@ export function renderResultsSection(props: ResultsSectionProps = {}): string {
         visible = false
     } = props;
 
-    const hidden = visible ? '' : 'hidden';
-
     const renderStats = (stats: any): string => {
         if (!stats) return '';
 
@@ -86,7 +84,7 @@ export function renderResultsSection(props: ResultsSectionProps = {}): string {
     };
 
     return `
-        <section class="results-section" id="resultsSection" aria-labelledby="results-heading" ${hidden}>
+        <section class="results-section" id="resultsSection" aria-labelledby="results-heading" hidden>
             <h2 id="results-heading" class="section-heading">Scan Results</h2>
             <div class="results-container" id="resultsContainer">
                 <div class="result-item">

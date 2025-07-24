@@ -1,5 +1,5 @@
-import { Page } from 'playwright';
-import { ToolResult } from '../../core/types/common';
+import { Page } from '@playwright/test';
+import { ToolResult } from '@/core/types/common';
 import { ErrorHandlerService } from '@/utils/services/error-handler-service';
 
 export interface AccessibilityToolOptions {

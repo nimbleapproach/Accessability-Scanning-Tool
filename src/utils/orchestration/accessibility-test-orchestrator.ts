@@ -1,4 +1,4 @@
-import { Page } from 'playwright';
+import { Page } from '@playwright/test';
 import { AxeTestRunner } from '@/utils/runners/axe-test-runner';
 import { Pa11yTestRunner } from '@/utils/runners/pa11y-test-runner';
 import {
@@ -9,8 +9,8 @@ import {
 } from '@/core/types/common';
 import { ViolationProcessor } from '@/utils/processors/violation-processor';
 import { PageAnalysisResult, PageAnalyzer } from '@/utils/analyzers/page-analyzer';
-import { ConfigurationService } from '../services/configuration-service';
-import { ErrorHandlerService } from '../services/error-handler-service';
+import { ConfigurationService } from '@/utils/services/configuration-service';
+import { ErrorHandlerService } from '@/utils/services/error-handler-service';
 import { FileOperationsService } from '@/utils/services/file-operations-service';
 import { TestSetupUtil } from '@/utils/test-setup-util';
 import { AxeResults } from 'axe-core';

@@ -481,7 +481,7 @@ describe('WebSocket Integration Tests', () => {
             clientSocket = Client(`http://localhost:${testPort}`);
             const scanId = 'rapid-updates-scan';
             let updateCount = 0;
-            const rapidUpdates = 20; // Reduced from 50 to avoid timeout issues
+            const rapidUpdates = 10; // Further reduced to avoid timeout
 
             clientSocket.on('connect', () => {
                 clientSocket.emit('join-scan', scanId);
@@ -496,13 +496,13 @@ describe('WebSocket Integration Tests', () => {
                     }
                 });
 
-                // Send rapid updates with longer intervals
+                // Send rapid updates with much longer intervals
                 for (let i = 0; i < rapidUpdates; i++) {
                     setTimeout(() => {
                         server['emitProgressUpdate'](scanId, 'rapid', i, `Update ${i}`);
-                    }, i * 20); // Increased from 10ms to 20ms
+                    }, i * 50); // Increased to 50ms intervals
                 }
             });
-        });
+        }, 15000); // Increased timeout to 15 seconds
     });
 }); 

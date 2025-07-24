@@ -1,8 +1,8 @@
 import { Page } from '@playwright/test';
 import { AxeResults, RunOptions } from 'axe-core';
 import AxeBuilder from '@axe-core/playwright';
-import { ConfigurationService } from '../services/configuration-service';
-import { ErrorHandlerService } from '../services/error-handler-service';
+import { ConfigurationService } from '@/utils/services/configuration-service';
+import { ErrorHandlerService } from '@/utils/services/error-handler-service';
 import { ServiceResult } from '@/core/types/common';
 
 export interface AxeTestOptions {

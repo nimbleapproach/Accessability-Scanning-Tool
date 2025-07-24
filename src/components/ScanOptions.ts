@@ -48,16 +48,16 @@ export function renderScanOptions(props: ScanOptionsProps = {}): string {
             buttonIcon: '📊'
         },
         {
-            id: 'regenerate',
-            icon: '🔄',
-            title: 'Regenerate Reports',
-            description: 'Regenerate accessibility reports from existing scan data',
+            id: 'generate',
+            icon: '📄',
+            title: 'Generate Reports',
+            description: 'Generate PDF reports from past scan results stored in the database',
             formId: '',
             inputId: '',
             inputName: '',
             inputPlaceholder: '',
             inputHelp: '',
-            buttonText: 'Regenerate Reports',
+            buttonText: 'Generate Reports',
             buttonClass: 'btn-tertiary',
             buttonIcon: '📄'
         }
@@ -66,7 +66,7 @@ export function renderScanOptions(props: ScanOptionsProps = {}): string {
     const options = props.options || defaultOptions;
 
     const renderScanOption = (option: ScanOption): string => {
-        if (option.id === 'regenerate') {
+        if (option.id === 'generate') {
             return `
                 <div class="scan-option">
                     <div class="scan-option-header">
@@ -74,7 +74,7 @@ export function renderScanOptions(props: ScanOptionsProps = {}): string {
                         <h3>${option.title}</h3>
                     </div>
                     <p>${option.description}</p>
-                    <button type="button" class="btn ${option.buttonClass}" id="regenerateReportsBtn">
+                    <button type="button" class="btn ${option.buttonClass}" id="generateReportsBtn">
                         <span class="btn-icon">${option.buttonIcon}</span>
                         ${option.buttonText}
                     </button>

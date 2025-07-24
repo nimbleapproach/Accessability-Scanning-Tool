@@ -31,8 +31,6 @@ export function renderErrorSection(props: ErrorSectionProps = {}): string {
         visible = false
     } = props;
 
-    const hidden = visible ? '' : 'hidden';
-
     const renderActions = (actions: any[]): string => {
         if (!actions || actions.length === 0) return '';
 
@@ -49,7 +47,7 @@ export function renderErrorSection(props: ErrorSectionProps = {}): string {
     };
 
     return `
-        <section class="error-section" id="errorSection" aria-labelledby="error-heading" ${hidden}>
+        <section class="error-section" id="errorSection" aria-labelledby="error-heading" hidden>
             <h2 id="error-heading" class="section-heading">Error</h2>
             <div class="error-container" id="errorContainer">
                 <h3>${error.title}</h3>

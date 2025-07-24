@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { ErrorHandlerService } from '../services/error-handler-service';
+import { ErrorHandlerService } from '@/utils/services/error-handler-service';
 import { ServiceResult } from '@/core/types/common';
 
 export interface PageAnalysisResult {
@@ -200,22 +200,19 @@ export class PageAnalyzer {
   /**
    * Analyzes keyboard navigation
    */
-  // TODO: Fix this type error
-  private async analyzeKeyboardNavigation(): Promise<any> {
+  // Fixed: Properly type the return value
+  private async analyzeKeyboardNavigation(): Promise<PageAnalysisResult['keyboardNavigation']> {
     return await this.page.evaluate(() => {
       const focusableElements = document.querySelectorAll(
         'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
 
-      return {
-        interactiveElements: Array.from(focusableElements).map(element => ({
-          ...element,
-          // TODO: Fix this type error
-          // canFocus: element.tabIndex >= 0,
-          hasVisibleFocus: false, // Placeholder
-        })),
-        total: focusableElements.length,
-      };
+      return Array.from(focusableElements).map(element => ({
+        element: element.tagName.toLowerCase() + (element.id ? `#${element.id}` : ''),
+        // Fixed: Properly access tabIndex property
+        canFocus: (element as HTMLElement).tabIndex >= 0,
+        hasVisibleFocus: false, // Placeholder - would need CSS analysis for actual implementation
+      }));
     });
   }
 

@@ -218,6 +218,19 @@ export class ErrorHandlerService {
   }
 
   /**
+   * Logs error in a consistent format
+   * @param message Error message to log
+   * @param data Optional data to include in the log
+   */
+  logError(message: string, data?: any): void {
+    if (data) {
+      console.error('❌ Error:', message, JSON.stringify(data, null, 2));
+    } else {
+      console.error('❌ Error:', message);
+    }
+  }
+
+  /**
    * Logs success in a consistent format
    * @param message Success message to log
    * @param data Optional data to include in the log

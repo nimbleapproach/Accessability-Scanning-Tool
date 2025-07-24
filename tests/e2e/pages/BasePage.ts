@@ -4,7 +4,7 @@ export class BasePage {
     protected page: Page;
 
     // Common selectors
-    protected readonly headerSelector = 'h1';
+    protected readonly headerSelector = 'h1.logo';
     protected readonly footerSelector = '.footer';
     protected readonly mainContentSelector = '.main';
 

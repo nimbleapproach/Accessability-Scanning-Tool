@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
 import path from 'path';
+import { ErrorHandlerService } from './services/error-handler-service';
 
 export interface CachedPageList {
   siteUrl: string;
@@ -38,6 +39,7 @@ export class PageListCache {
     'page-cache'
   );
   private static readonly CACHE_FILE = path.join(PageListCache.CACHE_DIR, 'page-list.json');
+  private static readonly errorHandler = ErrorHandlerService.getInstance();
 
   static ensureCacheDir(): void {
     if (!existsSync(PageListCache.CACHE_DIR)) {
@@ -46,15 +48,15 @@ export class PageListCache {
   }
 
   static savePageList(cachedPageList: CachedPageList): void {
-    console.log('💾 Saving page list to cache...');
+    PageListCache.errorHandler.logInfo('💾 Saving page list to cache...');
     PageListCache.ensureCacheDir();
     writeFileSync(PageListCache.CACHE_FILE, JSON.stringify(cachedPageList, null, 2));
-    console.log(`✅ Page list cached: ${cachedPageList.pages.length} pages saved`);
+    PageListCache.errorHandler.logSuccess(`✅ Page list cached: ${cachedPageList.pages.length} pages saved`);
   }
 
   static loadPageList(targetUrl?: string): CachedPageList | null {
     if (!existsSync(PageListCache.CACHE_FILE)) {
-      console.log('⚠️  No cached page list found');
+      PageListCache.errorHandler.logWarning('⚠️  No cached page list found');
       return null;
     }
 
@@ -75,22 +77,22 @@ export class PageListCache {
         const targetUrlNormalized = normalizeUrl(targetUrl);
 
         if (cachedUrlNormalized !== targetUrlNormalized) {
-          console.log(`❌ Cache URL mismatch:`);
-          console.log(`   📋 Cached:  ${cached.siteUrl}`);
-          console.log(`   🎯 Target:  ${targetUrl}`);
-          console.log(`   🔄 Cache will be regenerated for the new URL`);
+          PageListCache.errorHandler.logWarning(`❌ Cache URL mismatch:`);
+          PageListCache.errorHandler.logWarning(`   📋 Cached:  ${cached.siteUrl}`);
+          PageListCache.errorHandler.logWarning(`   🎯 Target:  ${targetUrl}`);
+          PageListCache.errorHandler.logWarning(`   🔄 Cache will be regenerated for the new URL`);
           return null;
         }
       }
 
-      console.log(`✅ Loaded cached page list: ${cached.pages.length} pages`);
-      console.log(`📅 Cache created: ${new Date(cached.timestamp).toLocaleString()}`);
+      PageListCache.errorHandler.logSuccess(`✅ Loaded cached page list: ${cached.pages.length} pages`);
+      PageListCache.errorHandler.logInfo(`📅 Cache created: ${new Date(cached.timestamp).toLocaleString()}`);
       if (cached.siteUrl) {
-        console.log(`🌐 Site URL: ${cached.siteUrl}`);
+        PageListCache.errorHandler.logInfo(`🌐 Site URL: ${cached.siteUrl}`);
       }
       return cached;
     } catch (error) {
-      console.warn('⚠️  Failed to load cached page list:', error);
+      PageListCache.errorHandler.logWarning('⚠️  Failed to load cached page list:', error);
       return null;
     }
   }
@@ -105,7 +107,7 @@ export class PageListCache {
     const isValid = cacheAge < maxAge;
 
     if (!isValid) {
-      console.log(
+      PageListCache.errorHandler.logWarning(
         `⏰ Cache expired (${Math.round(cacheAge / 1000 / 60)} minutes old, max ${maxAgeMinutes} minutes)`
       );
     }
@@ -117,10 +119,10 @@ export class PageListCache {
     try {
       if (existsSync(PageListCache.CACHE_FILE)) {
         unlinkSync(PageListCache.CACHE_FILE);
-        console.log('🗑️  Page list cache cleared');
+        PageListCache.errorHandler.logSuccess('🗑️  Page list cache cleared');
       }
     } catch (error) {
-      console.error('🔥 Failed to clear cache:', error);
+      PageListCache.errorHandler.logWarning('🔥 Failed to clear cache:', error);
     }
   }
 

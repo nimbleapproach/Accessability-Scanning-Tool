@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
-import { ConfigurationService } from '../services/configuration-service';
-import { ErrorHandlerService } from '../services/error-handler-service';
+import { ConfigurationService } from '@/utils/services/configuration-service';
+import { ErrorHandlerService } from '@/utils/services/error-handler-service';
 import { ServiceResult } from '@/core/types/common';
 // Fix: Use default import for pa11y instead of named import
 import pa11y from 'pa11y';
