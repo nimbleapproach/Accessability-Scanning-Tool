@@ -130,8 +130,8 @@ describe('MetricsCalculator', () => {
             ];
 
             const analysisResults: AnalysisResult[] = [
-                createMockAnalysisResult('https://example.com', 2, [violations[0], violations[2]]),
-                createMockAnalysisResult('https://example.com/page1', 1, [violations[1]]),
+                createMockAnalysisResult('https://example.com', 2, [violations[0]!, violations[2]!]),
+                createMockAnalysisResult('https://example.com/page1', 1, [violations[1]!]),
                 createMockAnalysisResult('https://example.com/page2', 0, [])
             ];
 
@@ -239,7 +239,7 @@ describe('MetricsCalculator', () => {
             expect(metrics.totalPages).toBe(0);
             expect(metrics.crawlTime).toBe(0);
             expect(metrics.averageTimePerPage).toBe(0);
-            expect(metrics.successRate).toBe(100);
+            expect(metrics.successRate).toBe(0);
             expect(metrics.pagesWithErrors).toBe(0);
         });
     });
