@@ -83,7 +83,7 @@ export function renderSinglePageScanPage(props: SinglePageScanPageProps = {}): s
                         </div>
                     </section>
                     
-                    ${renderProgressSection({ ...progress })}
+                    ${renderProgressSection({ ...progress, scanType: 'single-page' })}
                     ${renderResultsSection({ ...results })}
                     ${renderErrorSection({ ...error })}
                 </div>

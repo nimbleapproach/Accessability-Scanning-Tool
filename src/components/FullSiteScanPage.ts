@@ -83,7 +83,7 @@ export function renderFullSiteScanPage(props: FullSiteScanPageProps = {}): strin
                         </div>
                     </section>
                     
-                    ${renderProgressSection({ ...progress })}
+                    ${renderProgressSection({ ...progress, scanType: 'full-site' })}
                     ${renderResultsSection({ ...results })}
                     ${renderErrorSection({ ...error })}
                 </div>
