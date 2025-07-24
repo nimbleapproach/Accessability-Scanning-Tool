@@ -1,9 +1,9 @@
 import { test, expect } from './setup/test-setup';
-import { setupTest, cleanupTest, TestUtils, TEST_CONFIG } from './setup/test-setup';
+import { setupTest, setupFullSiteTest, cleanupTest, TestUtils, TEST_CONFIG } from './setup/test-setup';
 
 test.describe('Simple Form Tests', () => {
     test.beforeEach(async ({ page }) => {
-        await setupTest(page);
+        await setupFullSiteTest(page);
     });
 
     test.afterEach(async ({ page }) => {

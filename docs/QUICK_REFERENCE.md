@@ -4,8 +4,8 @@
 
 Quick answers to common questions and operations for the accessibility testing application.
 
-**Last Updated**: 24/01/2025 12:00 GMT  
-**Status**: ✅ **CURRENT** - All phases completed, 100% test success rate achieved, complete component coverage implemented
+**Last Updated**: 24/01/2025 10:45 GMT  
+**Status**: ✅ **CURRENT** - All phases completed, 100% test success rate achieved, complete component coverage implemented, progress section fixes completed
 
 ---
 
@@ -495,8 +495,53 @@ if (!fs.existsSync(reportsDir)) {
 }
 ```
 
+### **Progress Section Stage Handling**
+
+```typescript
+// ✅ CORRECT - ProgressSection component with stage-based tracking
+export interface ProgressStage {
+    id: string;           // Server stage ID (init, browser-init, crawling, etc.)
+    icon: string;         // Stage icon (🚀, 🌐, 🔍, etc.)
+    text: string;         // Stage description
+    status?: 'pending' | 'active' | 'completed' | 'error';
+}
+
+// Server stages map to client stage elements
+const stageMap = {
+    'init': 'initializing',
+    'browser-init': 'initializing', 
+    'crawling': 'crawling',
+    'analysis': 'analyzing',
+    'storing': 'generating',
+    'reporting': 'generating'
+};
+
+// Stage icons with visual feedback
+const stageIcons = {
+    pending: {
+        'init': '🚀',
+        'browser-init': '🌐',
+        'crawling': '🕷️',
+        'analysis': '🔍',
+        'storing': '💾',
+        'reporting': '📊'
+    },
+    active: '⏳',      // In progress
+    completed: '✅',   // Completed
+    error: '❌'        // Error
+};
+
+// Usage in scan pages
+${renderProgressSection({ 
+    progress: 25, 
+    text: 'Crawling site...', 
+    scanType: 'full-site' 
+})}
+```
+
 **Recent Fixes Applied**:
 - ✅ **PDF Generation**: Added null checks for all summary properties
+- ✅ **Progress Section**: Fixed stage-based progress tracking with proper server-client stage mapping and visual icon feedback
 - ✅ **Browser Navigation**: Enhanced error handling with retry logic
 - ✅ **Directory Creation**: Automatic creation of accessibility-reports directory
 - ✅ **TypeScript Errors**: Fixed all unknown error type issues

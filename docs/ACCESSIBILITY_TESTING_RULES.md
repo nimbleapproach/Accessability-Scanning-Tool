@@ -160,7 +160,7 @@ test('should support keyboard navigation', async ({ page }) => {
 #### **Core Components** (`src/components/`) - ✅ **FULLY TESTED**
 - **Header.ts** - Main navigation header component ✅ **Storybook stories: 3 variants**
 - **ScanOptions.ts** - Scan configuration options ✅ **Storybook stories: 3 variants**
-- **ProgressSection.ts** - Real-time progress display ✅ **Storybook stories: 7 variants**
+- **ProgressSection.ts** - Real-time progress display with stage-based tracking and visual icon feedback ✅ **Storybook stories: 7 variants**
 - **ResultsSection.ts** - Results display and navigation ✅ **Storybook stories: 5 variants**
 - **ErrorSection.ts** - Error handling and display ✅ **Storybook stories: 7 variants**
 - **Footer.ts** - Footer component ✅ **Storybook stories: 5 variants**
