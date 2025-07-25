@@ -8,6 +8,9 @@ describe('Processors Integration Tests', () => {
     let configService: ConfigurationService;
 
     beforeEach(() => {
+        // Setup test environment and database cleanup
+        (global as any).testUtils.database.setupTestEnvironment();
+
         // Setup real services
         errorHandler = ErrorHandlerService.getInstance();
         configService = ConfigurationService.getInstance();
@@ -16,7 +19,10 @@ describe('Processors Integration Tests', () => {
         violationProcessor = new ViolationProcessor(errorHandler);
     });
 
-    afterEach(() => {
+    afterEach(async () => {
+        // Clean up test data and verify cleanup
+        await (global as any).testUtils.database.cleanupTestData();
+        await (global as any).testUtils.database.verifyCleanup();
         jest.clearAllMocks();
     });
 

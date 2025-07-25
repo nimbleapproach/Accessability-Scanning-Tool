@@ -33,20 +33,26 @@ npx storybook dev -p 6006
 
 #### **Running Accessibility Tests**
 ```bash
-# Run all accessibility tests
-npm run test:e2e -- --grep "accessibility"
+# Run all accessibility tests (recommended)
+npm run test:accessibility
 
-# Run specific accessibility test suites
+# Run E2E accessibility tests only
+npm run test:accessibility:e2e
+
+# Run Storybook component accessibility tests only
+npm run test:accessibility:storybook
+
+# Quick accessibility validation
+npm run test:accessibility:quick
+
+# Validate accessibility testing infrastructure
+npm run test:accessibility:validate
+
+# Legacy commands (still supported)
+npm run test:e2e -- --grep "accessibility"
 npm run test:e2e -- tests/e2e/interface-accessibility.test.ts
 npm run test:e2e -- tests/e2e/web-interface.test.ts
-
-# Run accessibility scanning tests
 npm run test:e2e -- tests/e2e/accessibility-scanning.test.ts
-
-# Run component accessibility tests
-npm run test:e2e -- tests/storybook/component-accessibility.test.ts
-
-# Run Storybook validation tests
 npx jest tests/storybook/storybook-validation.test.ts
 ```
 

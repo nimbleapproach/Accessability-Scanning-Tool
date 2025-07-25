@@ -20,6 +20,9 @@ describe('API Layer Integration Tests', () => {
     let configService: ConfigurationService;
 
     beforeEach(() => {
+        // Setup test environment and database cleanup
+        (global as any).testUtils.database.setupTestEnvironment();
+
         // Setup mocks
         mockDatabaseService = {
             storeReport: jest.fn().mockResolvedValue({ success: true }),
@@ -64,7 +67,10 @@ describe('API Layer Integration Tests', () => {
         analysisService = AnalysisService.getInstance();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
+        // Clean up test data and verify cleanup
+        await (global as any).testUtils.database.cleanupTestData();
+        await (global as any).testUtils.database.verifyCleanup();
         jest.clearAllMocks();
     });
 
@@ -317,32 +323,32 @@ describe('API Layer Integration Tests', () => {
         });
     });
 
-      describe('Error Recovery and Resilience', () => {
-    test('should recover from temporary analysis failures', async () => {
-      const targetUrl = 'https://example.com';
-      const options = { wcagLevel: 'WCAG2AA' };
+    describe('Error Recovery and Resilience', () => {
+        test('should recover from temporary analysis failures', async () => {
+            const targetUrl = 'https://example.com';
+            const options = { wcagLevel: 'WCAG2AA' };
 
-      const result = await analysisService.analyzePage(targetUrl, options);
-      
-      expect(result.success).toBeDefined();
+            const result = await analysisService.analyzePage(targetUrl, options);
+
+            expect(result.success).toBeDefined();
+        });
+
+        test('should handle partial analysis failures', async () => {
+            const targetUrl = 'https://example.com';
+            const options = { wcagLevel: 'WCAG2AA' };
+
+            const result = await analysisService.analyzePage(targetUrl, options);
+
+            expect(result.success).toBeDefined();
+        });
+
+        test('should handle service unavailability', async () => {
+            const targetUrl = 'https://example.com';
+            const options = { wcagLevel: 'WCAG2AA' };
+
+            const result = await analysisService.analyzePage(targetUrl, options);
+
+            expect(result.success).toBeDefined();
+        });
     });
-
-    test('should handle partial analysis failures', async () => {
-      const targetUrl = 'https://example.com';
-      const options = { wcagLevel: 'WCAG2AA' };
-
-      const result = await analysisService.analyzePage(targetUrl, options);
-      
-      expect(result.success).toBeDefined();
-    });
-
-    test('should handle service unavailability', async () => {
-      const targetUrl = 'https://example.com';
-      const options = { wcagLevel: 'WCAG2AA' };
-
-      const result = await analysisService.analyzePage(targetUrl, options);
-      
-      expect(result.success).toBeDefined();
-    });
-  });
 }); 

@@ -21,8 +21,6 @@ const meta: Meta<typeof ReportsPage> = {
     },
     tags: ['autodocs'],
     argTypes: {
-        onReportSelect: { action: 'report-select' },
-        onReportDelete: { action: 'report-delete' },
         onReportDownload: { action: 'report-download' },
     },
 };

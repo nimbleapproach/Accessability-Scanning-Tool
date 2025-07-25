@@ -4,7 +4,7 @@
 
 This guide provides critical rules and patterns for AI-assisted development in the accessibility testing application. Follow these rules strictly to maintain code quality and prevent breaking changes.
 
-**Last Updated**: 24/01/2025 09:30 GMT  
+**Last Updated**: 25/01/2025 11:00 GMT  
 **Status**: ✅ **CURRENT** - All phases completed, 100% test success rate achieved
 
 ---
@@ -19,6 +19,7 @@ This guide provides critical rules and patterns for AI-assisted development in t
 // ✅ CORRECT - Use @/ alias
 import { ErrorHandlerService } from '@/utils/services/error-handler-service';
 import { ConfigurationService } from '@/utils/services/configuration-service';
+import { DatabaseCleanupService } from '@/utils/services/database-cleanup-service';
 import { ServiceResult } from '@/core/types/common';
 
 // ❌ INCORRECT - Relative imports (FIXED)
@@ -37,6 +38,7 @@ import { ConfigurationService } from '../../utils/services/configuration-service
 const errorHandler = ErrorHandlerService.getInstance();
 const configService = ConfigurationService.getInstance();
 const databaseService = DatabaseService.getInstance();
+const cleanupService = DatabaseCleanupService.getInstance();
 
 // ❌ INCORRECT - Direct instantiation (PREVENTED)
 const errorHandler = new ErrorHandlerService(); // Throws error
@@ -91,7 +93,92 @@ const metrics = metricsCalculator.calculateWorkflowMetrics(crawlResults, analysi
 
 **Status**: ✅ **IMPLEMENTED** - All complex operations use specialized orchestrators
 
-### **6. Component Testing Infrastructure** ✅ **COMPLETE**
+### **6. Database Cleanup Service** ✅ **NEWLY IMPLEMENTED**
+
+**ALWAYS use DatabaseCleanupService for test data management**:
+
+```typescript
+
+### **7. CSS and Styling Patterns** ✅ **STANDARDIZED**
+
+**ALWAYS use absolute paths for CSS links in components**:
+
+```html
+<!-- ✅ CORRECT - Use absolute path -->
+<link rel="stylesheet" href="/styles.css?v=20250125">
+
+<!-- ❌ INCORRECT - Relative path (causes loading issues) -->
+<link rel="stylesheet" href="styles.css">
+```
+
+**ALWAYS use CSS variables for consistent styling**:
+
+```css
+/* ✅ CORRECT - Use CSS variables */
+.report-details-container {
+  background: var(--white);
+  color: var(--primary);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+}
+
+/* ❌ INCORRECT - Hard-coded values */
+.report-details-container {
+  background: #ffffff;
+  color: #1e214d;
+  padding: 2rem;
+  border-radius: 12px;
+}
+```
+
+**ALWAYS include cache-busting parameters for CSS updates**:
+
+```html
+<!-- ✅ CORRECT - Include version parameter -->
+<link rel="stylesheet" href="/styles.css?v=20250125">
+
+<!-- ❌ INCORRECT - No cache busting -->
+<link rel="stylesheet" href="/styles.css">
+```
+
+**Status**: ✅ **STANDARDIZED** - All components use absolute CSS paths and cache busting
+// ✅ CORRECT - Database cleanup patterns
+const cleanupService = DatabaseCleanupService.getInstance();
+
+// Perform comprehensive cleanup
+const result = await cleanupService.performCleanup({
+    testData: true,
+    orphanedReports: true,
+    expiredReports: false,
+    dryRun: false
+});
+
+// Get database statistics
+const stats = await cleanupService.getDatabaseStatistics();
+
+// Reset database (use with caution)
+const resetResult = await cleanupService.resetDatabase();
+```
+
+**Test Database Cleanup**:
+```typescript
+// ✅ CORRECT - Test database cleanup utilities
+// In test setup
+(global as any).testUtils.database.setupTestEnvironment();
+
+// Before each test
+await (global as any).testUtils.database.cleanupTestData();
+
+// After each test
+await (global as any).testUtils.database.cleanupTestData();
+
+// Get test database statistics
+const stats = await (global as any).testUtils.database.getTestDatabaseStats();
+```
+
+**Status**: ✅ **IMPLEMENTED** - Database cleanup service fully operational with comprehensive test utilities
+
+### **7. Component Testing Infrastructure** ✅ **COMPLETE**
 
 **COMPREHENSIVE COMPONENT COVERAGE ACHIEVED** (Latest Implementation):
 
@@ -122,7 +209,7 @@ test('should pass WCAG 2.1 AA compliance', async ({ page }) => {
 
 **Status**: ✅ **100% COMPONENT COVERAGE** - All 11 components fully tested with 76 story variants
 
-### **7. E2E Testing Infrastructure** ✅ **ENHANCED**
+### **8. E2E Testing Infrastructure** ✅ **ENHANCED**
 
 **CRITICAL UPDATES APPLIED** (Latest Implementation):
 
@@ -153,7 +240,41 @@ await setupSinglePageTest(page); // Goes to /single-page
 // Single page scan: /single-page with form
 ```
 
-### **8. Enhanced Error Handling** ✅ **RECENTLY IMPROVED**
+### **9. Enhanced Report Generation** ✅ **NEWLY IMPLEMENTED**
+
+**ADVANCED REPORT GENERATION FEATURES** (Latest Implementation):
+
+**Enhanced ReportsPage Component**:
+```typescript
+// ✅ CORRECT - Advanced search and filtering
+// Features: Advanced search filters, database management, bulk operations
+// Search filters: URL, report type, date range, WCAG level, violation counts, compliance percentage
+// Database management: Statistics, cleanup operations, test data management
+// Bulk operations: Select all, generate selected reports, individual report generation
+```
+
+**Database Integration**:
+```typescript
+// ✅ CORRECT - Database-backed report management
+// Search reports with advanced filters
+const searchData = {
+    siteUrl: 'https://example.com',
+    reportType: 'site-wide',
+    dateFrom: '2024-01-01',
+    dateTo: '2024-12-31',
+    wcagLevel: 'AA',
+    minViolations: 0,
+    maxViolations: 100,
+    minCompliancePercentage: 50
+};
+
+// Generate reports from database
+const result = await generateReportsFromDatabase(searchData);
+```
+
+**Status**: ✅ **IMPLEMENTED** - Enhanced report generation with database integration and advanced filtering
+
+### **10. Enhanced Error Handling** ✅ **RECENTLY IMPROVED**
 const mostCommonViolations = report.summary?.mostCommonViolations || [];
 const complianceScore = Math.round(report.summary?.compliancePercentage || 0);
 
@@ -209,7 +330,7 @@ try {
 
 ---
 
-## ✅ **RESOLVED ISSUES** (Phase 1-5 - **COMPLETED**)
+## ✅ **RESOLVED ISSUES** (Phase 1-7 - **COMPLETED**)
 
 ### **TypeScript Compilation Errors** ✅ **RESOLVED**
 
@@ -260,6 +381,21 @@ try {
 
 **Status**: ✅ **RESOLVED** - Web server fully functional with orchestrator system
 
+### **Database Cleanup Implementation** ✅ **NEWLY COMPLETED**
+
+**Problem**: Tests were entering data into the database without proper cleanup
+
+**Resolution Actions**:
+1. ✅ **Phase 1**: Created DatabaseCleanupService for comprehensive database management
+2. ✅ **Phase 2**: Implemented test data cleanup utilities in test setup
+3. ✅ **Phase 3**: Enhanced ReportsPage component with database integration
+4. ✅ **Phase 4**: Updated integration tests with proper database cleanup
+5. ✅ **Phase 5**: Added comprehensive unit tests for cleanup service
+6. ✅ **Phase 6**: Implemented advanced search and filtering capabilities
+7. ✅ **Phase 7**: Added database statistics and maintenance features
+
+**Status**: ✅ **ALL 7 PHASES COMPLETED** - Database cleanup system fully operational with enhanced report generation
+
 ---
 
 ## 🔧 **Development Patterns**
@@ -273,6 +409,12 @@ src/
 │   └── utils/browser-manager.ts # Browser management
 ├── utils/
 │   ├── services/                # Singleton services
+│   │   ├── database-service.ts
+│   │   ├── database-cleanup-service.ts  # NEW
+│   │   ├── error-handler-service.ts
+│   │   ├── configuration-service.ts
+│   │   ├── file-operations-service.ts
+│   │   └── security-validation-service.ts
 │   ├── orchestration/           # Workflow orchestration
 │   ├── runners/                 # Test runners
 │   └── analysis/                # Analysis tools
@@ -286,6 +428,7 @@ src/
 - `ErrorHandlerService` - Centralized error handling
 - `ConfigurationService` - Configuration management
 - `DatabaseService` - Database operations
+- `DatabaseCleanupService` - Database cleanup and maintenance (NEW)
 - `FileOperationsService` - File system operations
 - `SecurityValidationService` - Security validation
 
@@ -298,6 +441,7 @@ import { ServiceResult, AnalysisResult } from '@/core/types/common';
 
 // Services
 import { ErrorHandlerService } from '@/utils/services/error-handler-service';
+import { DatabaseCleanupService } from '@/utils/services/database-cleanup-service';
 
 // Utilities
 import { BrowserManager } from '@/core/utils/browser-manager';
@@ -338,6 +482,9 @@ jest.mock('@/utils/services/error-handler-service');
 import { MetricsCalculator } from '@/utils/orchestration/metrics-calculator';
 import { DataTransformer } from '@/utils/orchestration/data-transformer';
 
+// ✅ CORRECT - Database cleanup testing
+import { DatabaseCleanupService } from '@/utils/services/database-cleanup-service';
+
 // ✅ CORRECT - Mock data helpers for complex types
 const createMockViolation = (id: string, impact: 'minor' | 'moderate' | 'serious' | 'critical'): ProcessedViolation => ({
   id,
@@ -370,6 +517,7 @@ const createMockViolation = (id: string, impact: 'minor' | 'moderate' | 'serious
 // ✅ CORRECT - Service integration
 import { WorkflowOrchestrator } from '@/utils/orchestration/workflow-orchestrator';
 import { DatabaseService } from '@/utils/services/database-service';
+import { DatabaseCleanupService } from '@/utils/services/database-cleanup-service';
 
 // ✅ CORRECT - PDF generation testing
 import { PdfOrchestrator } from '@/utils/reporting/pdf-generators/pdf-orchestrator';
@@ -382,6 +530,30 @@ const mockPage = {
   pdf: jest.fn(),
   close: jest.fn()
 } as unknown as Page;
+```
+
+### **Database Testing**
+
+```typescript
+// ✅ CORRECT - Database cleanup in tests
+beforeEach(async () => {
+  // Set up test database environment
+  (global as any).testUtils.database.setupTestEnvironment();
+});
+
+afterEach(async () => {
+  // Clean up test data
+  await (global as any).testUtils.database.cleanupTestData();
+});
+
+// ✅ CORRECT - Test data creation
+const mockReport = (global as any).testUtils.createTestData.createMockSiteWideReport({
+  siteUrl: 'https://test-example.com',
+  metadata: {
+    scanId: 'test-scan-' + Date.now(),
+    scanType: 'test'
+  }
+});
 ```
 
 ---
@@ -398,9 +570,7 @@ const mockPage = {
   "axe-core": "^4.9.1",
   "express": "^4.18.2",
   "mongodb": "^6.17.0",
-  "mongoose": "^8.16.4", // ⚠️ UNUSED - Remove
   "pa11y": "^9.0.0",
-  "puppeteer": "^24.14.0", // ⚠️ UNUSED - Remove
   "socket.io": "^4.7.2"
 }
 ```
@@ -410,9 +580,8 @@ const mockPage = {
 {
   "@types/express": "^4.17.21",
   "@types/jest": "^29.5.12",
-  // ⚠️ MISSING - Add
-  // "@types/node": "^20.0.0",
-  // "@types/events": "^3.0.0",
+  "@types/node": "^20.0.0",
+  "@types/events": "^3.0.0",
   "typescript": "^5.5.4"
 }
 ```
@@ -426,12 +595,13 @@ const mockPage = {
 1. **`src/core/types/common.ts`** - All shared types and interfaces
 2. **`src/utils/services/error-handler-service.ts`** - Central error handling
 3. **`src/utils/services/configuration-service.ts`** - Configuration management
-4. **`src/web/server.ts`** - Main web server entry point
+4. **`src/utils/services/database-cleanup-service.ts`** - Database cleanup operations (NEW)
+5. **`src/web/server.ts`** - Main web server entry point
 
 ### **New Utility Classes** (Phase 2.2 Refactoring)
 
-5. **`src/utils/orchestration/metrics-calculator.ts`** - Metrics calculation utility
-6. **`src/utils/orchestration/data-transformer.ts`** - Data transformation utility
+6. **`src/utils/orchestration/metrics-calculator.ts`** - Metrics calculation utility
+7. **`src/utils/orchestration/data-transformer.ts`** - Data transformation utility
 
 ### **Validation Checklist**
 
@@ -440,6 +610,7 @@ Before making any changes, verify:
 - [ ] Services use `getInstance()` pattern
 - [ ] Error handling uses `ErrorHandlerService`
 - [ ] Configuration uses `ConfigurationService`
+- [ ] Database cleanup uses `DatabaseCleanupService`
 - [ ] TypeScript compilation passes
 - [ ] No circular dependencies created
 
@@ -447,7 +618,7 @@ Before making any changes, verify:
 
 ## 🎯 **Current Development Status**
 
-### **✅ Completed** (Phase 1-6 - FULLY COMPLETED)
+### **✅ Completed** (Phase 1-7 - FULLY COMPLETED)
 - **Import Pattern Standardization**: All 15 files updated to use `@/` alias
 - **Service Pattern Compliance**: All services use singleton pattern
 - **Error Handling Standardization**: All production code uses ErrorHandlerService
@@ -459,6 +630,14 @@ Before making any changes, verify:
   - **Phase 4**: WorkflowOrchestrator integration completed
   - **Phase 5**: Testing & validation completed (396 tests passing)
   - **Phase 6**: Performance optimization & final validation completed
+- **Database Cleanup Implementation**: All 7 phases completed successfully
+  - **Phase 1**: DatabaseCleanupService created
+  - **Phase 2**: Test data cleanup utilities implemented
+  - **Phase 3**: ReportsPage component enhanced
+  - **Phase 4**: Integration tests updated with cleanup
+  - **Phase 5**: Unit tests for cleanup service created
+  - **Phase 6**: Advanced search and filtering implemented
+  - **Phase 7**: Database statistics and maintenance features added
 
 ### **✅ Completed** (Complete Component Coverage - 24/01/2025)
 - **Complete Component Coverage**: Achieved 100% component test coverage with comprehensive accessibility validation
@@ -495,6 +674,13 @@ Before making any changes, verify:
 - **Code Quality Verification**: All patterns verified and followed
 - **Documentation Updates**: All docs updated to reflect current state
 
+### **✅ Completed** (Phase 1.5)
+- **Database Cleanup Service**: Comprehensive database cleanup and maintenance service implemented
+- **Test Data Management**: Automated test data cleanup and management utilities
+- **Enhanced Report Generation**: Advanced search, filtering, and bulk operations
+- **Database Statistics**: Comprehensive database monitoring and statistics
+- **Integration Testing**: Updated all integration tests with proper database cleanup
+
 ### **⚠️ Known Runtime Issues** (Post-Refactoring)
 - **PDF Generation Errors**: PDF template generator failing due to undefined properties
   - Issue: `Cannot read properties of undefined (reading 'slice'/'map'/'forEach')`
@@ -529,6 +715,8 @@ Before making any changes, verify:
 - **Component Coverage**: ✅ 11/11 components fully tested (100% coverage) - Complete Storybook coverage
 - **Story Variants**: ✅ 76 story variants across all components - Comprehensive testing scenarios
 - **Orchestrator System**: ✅ Fully operational with specialized orchestrators
+- **Database Cleanup**: ✅ Fully operational with comprehensive test utilities
+- **Enhanced Reports**: ✅ Advanced search, filtering, and bulk operations implemented
 
 ### **Success Criteria**
 - **TypeScript Compilation**: ✅ 0 errors (achieved)
@@ -537,9 +725,10 @@ Before making any changes, verify:
 - **Dependency Efficiency**: ✅ 0 unused packages (achieved)
 - **Test Coverage**: ✅ 396 tests passing (100% success rate) - All test suites passing
 - **Orchestrator Refactoring**: ✅ All 6 phases completed (achieved)
+- **Database Cleanup**: ✅ All 7 phases completed (achieved)
 
 ---
 
-**Last Updated**: 24/01/2025 10:45 GMT  
-**Status**: ✅ **CURRENT** - All phases completed, 100% test success rate achieved, complete component coverage implemented, progress section fixes completed  
+**Last Updated**: 24/01/2025 14:30 GMT  
+**Status**: ✅ **CURRENT** - All phases completed, 100% test success rate achieved, complete component coverage implemented, database cleanup system operational, enhanced report generation implemented  
 **Next Review**: After next major feature addition 

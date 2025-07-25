@@ -536,7 +536,7 @@ The system intelligently manages historical audit data with dual storage:
 - **🔄 Automatic Cleanup**: Before each new audit, JSON files are moved to history and all existing PDF reports are deleted
 - **📂 History Folder**: JSON files are automatically moved to `accessibility-reports/history/` for future reference
 - **🧹 Clean Slate**: All existing PDF reports are deleted to provide a clean slate for new scan
-- **🔄 Enhanced Report Regeneration**: Historical JSON data can be used to regenerate enhanced PDF reports with database metadata without re-running accessibility scans
+- **📊 Database Integration**: Historical JSON data is stored in the database for future reference and analysis
 - **📊 Data Preservation**: All audit data is preserved for trend analysis and historical comparison
 - **📄 Fresh Reports**: New PDF reports are generated after each scan completes
 
@@ -595,7 +595,6 @@ The project includes a complete local MongoDB setup using Docker Compose:
 5. **API Endpoints**:
    - `GET /api/reports/:reportId` - Retrieve specific report by ID
    - `GET /api/reports/stats` - Get report statistics
-   - `POST /api/reports/regenerate` - List all reports (database first, then files)
 
 **Note**: If MongoDB is not configured, the system will automatically fall back to file-based storage.
 

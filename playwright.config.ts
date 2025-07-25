@@ -87,4 +87,8 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 180_000, // 3 minutes to start server (includes MongoDB startup)
   },
+
+  /* Global setup and teardown for database cleanup */
+  globalSetup: require.resolve('./tests/e2e/setup/global-setup.ts'),
+  globalTeardown: require.resolve('./tests/e2e/setup/global-teardown.ts'),
 });
