@@ -47,40 +47,12 @@ export function renderScanOptions(props: ScanOptionsProps = {}): string {
             buttonClass: 'btn-secondary',
             buttonIcon: '📊'
         },
-        {
-            id: 'generate',
-            icon: '📄',
-            title: 'Generate Reports',
-            description: 'Generate PDF reports from past scan results stored in the database',
-            formId: '',
-            inputId: '',
-            inputName: '',
-            inputPlaceholder: '',
-            inputHelp: '',
-            buttonText: 'Generate Reports',
-            buttonClass: 'btn-tertiary',
-            buttonIcon: '📄'
-        }
+
     ];
 
     const options = props.options || defaultOptions;
 
     const renderScanOption = (option: ScanOption): string => {
-        if (option.id === 'generate') {
-            return `
-                <div class="scan-option">
-                    <div class="scan-option-header">
-                        <span class="scan-icon">${option.icon}</span>
-                        <h3>${option.title}</h3>
-                    </div>
-                    <p>${option.description}</p>
-                    <button type="button" class="btn ${option.buttonClass}" id="generateReportsBtn">
-                        <span class="btn-icon">${option.buttonIcon}</span>
-                        ${option.buttonText}
-                    </button>
-                </div>
-            `;
-        }
 
         return `
             <div class="scan-option">

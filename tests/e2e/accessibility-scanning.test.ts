@@ -101,23 +101,7 @@ test.describe('Accessibility Scanning E2E Tests', () => {
         });
     });
 
-    test.describe('Report Generation', () => {
-        test('should load available reports for generation', async ({ page }) => {
-            // Click the generate reports button
-            await page.click('#generateReportsBtn');
 
-            // Wait for reports to load
-            await expect(page.getByText(/Available Reports|No Reports Available/)).toBeVisible({ timeout: 10000 });
-        });
-
-        test('should handle no existing data gracefully', async ({ page }) => {
-            // Click the generate reports button
-            await page.click('#generateReportsBtn');
-
-            // Verify appropriate message when no data exists
-            await expect(page.getByText(/No Reports Available|No reports found/)).toBeVisible({ timeout: 10000 });
-        });
-    });
 
     test.describe('User Interaction Testing', () => {
         test('should handle URL input and validation', async ({ page }) => {
